@@ -1,0 +1,41 @@
+/* src/style.css */
+:root {
+  --neon-blue: #00f0ff;
+  --neon-purple: #8a2be2;
+  --neon-green: #00ffa3;
+  --bg-dark: #05070a;
+  --glass-bg: rgba(10, 14, 23, 0.7);
+  --glass-border: rgba(0, 240, 255, 0.15);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+  --text-main: #e6edf3;
+  --text-muted: #8b949e;
+}
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', 'Segoe UI', 'PingFang SC', sans-serif;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
+::selection { background: rgba(0, 240, 255, 0.3); color: #fff; }
+
+.el-card, .el-table { border: none !important; }
+
+/* 科技感装饰角标 通用类 */
+.tech-corners {
+  position: relative;
+}
+.tech-corners::before, .tech-corners::after {
+  content: ''; position: absolute; width: 15px; height: 15px; border: 2px solid var(--neon-blue); transition: all 0.3s; z-index: 10; pointer-events: none;
+}
+.tech-corners::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.tech-corners::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }

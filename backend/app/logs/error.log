@@ -1,0 +1,410 @@
+2026-03-15 00:54:21,018 | ERROR    | ITS_App:34 | 发送请求，获取知识库下的知识失败了:HTTPStatusError("Server error '502 Bad Gateway' for url 'http://127.0.0.1:8001/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502")
+2026-03-15 13:31:57,827 | ERROR    | ITS_App:34 | 发送请求，获取知识库下的知识失败了:ConnectError('All connection attempts failed')
+2026-03-15 16:15:02,964 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] 由于目标计算机积极拒绝，无法连接。)")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\pooled_db.py", line 339, in connection
+    con = self._idle_cache.pop(0)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: pop from empty list
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 661, in connect
+    sock = socket.create_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\PY3.13\Lib\socket.py", line 865, in create_connection
+    raise exceptions[0]
+  File "E:\PY3.13\Lib\socket.py", line 850, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [WinError 10061] 由于目标计算机积极拒绝，无法连接。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 197, in query_nearest_repair_shops_by_coords
+    connection = pool.connection()
+                 ^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\pooled_db.py", line 341, in connection
+    con = self.steady_connection()
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\pooled_db.py", line 292, in steady_connection
+    return connect(
+           ^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 138, in connect
+    return SteadyDBConnection(
+           ^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 197, in __init__
+    self._store(self._create())
+                ^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 215, in _create
+    con = self._creator(*self._args, **self._kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 365, in __init__
+    self.connect()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 723, in connect
+    raise exc
+pymysql.err.OperationalError: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] 由于目标计算机积极拒绝，无法连接。)")
+2026-03-15 17:00:58,400 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 17:01:03,791 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 17:08:36,607 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'service_station_name' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'service_station_name' in 'field list'")
+2026-03-15 17:08:41,183 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'service_station_name' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'service_station_name' in 'field list'")
+2026-03-15 17:11:26,618 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 17:11:32,096 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 17:11:37,981 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 17:21:01,048 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 17:21:07,279 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 17:21:13,187 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 17:21:22,154 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 17:21:29,381 | ERROR    | ITS_App:266 | [NearestShops] DB query failed: (1054, "Unknown column 'id' in 'field list'")
+Traceback (most recent call last):
+  File "E:\Algorithm\LLM\ITS\backend\app\infrastructure\tools\loacl\service_station.py", line 249, in query_nearest_repair_shops_by_coords
+    cursor.execute(sql, (lat, lng, lat, limit))
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 682, in tough_method
+    raise error  # re-raise the original error again
+    ^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\dbutils\steady_db.py", line 605, in tough_method
+    result = method(*args, **kwargs)  # try to execute
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 153, in execute
+    result = self._query(query)
+             ^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\cursors.py", line 322, in _query
+    conn.query(q)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 575, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 826, in _read_query_result
+    result.read()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 1203, in read
+    first_packet = self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\connections.py", line 782, in _read_packet
+    packet.raise_for_error()
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "E:\Algorithm\LLM\ITS\backend\app\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'id' in 'field list'")
+2026-03-15 20:31:58,883 | ERROR    | ITS_App:35 | 发送请求，获取知识库下的知识失败了:ReadTimeout('')
+2026-03-15 20:34:35,285 | ERROR    | ITS_App:35 | 发送请求，获取知识库下的知识失败了:ReadTimeout('')
+2026-03-15 20:41:35,914 | ERROR    | ITS_App:35 | 发送请求，获取知识库下的知识失败了:ReadTimeout('')

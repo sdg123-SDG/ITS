@@ -1,0 +1,14 @@
+[
+  {
+    "role": "system",
+    "content": "你是一个有记忆的智能体助手，请基于上下文历史会话用户问题 (会话ID default_session)"
+  },
+  {
+    "role": "user",
+    "content": "# (\"多跳任务（先POI在技术问题）\", \"导航去中关村电子城。另外我想问问，组装一台 4090 显卡的电脑大概需要多大功率的电源？\")"
+  },
+  {
+    "role": "assistant",
+    "content": "- 目的地：中关村电子城\n- 导航链接（驾车）：\n  https://api.map.baidu.com/direction?origin=name:起点|latlng:39.98387690325234,116.32495647899299&destination=name:终点|latlng:39.98927143503506,116.32417567184372&mode=driving&output=html&coord_type=bd09ll&src=webapp.baidu.openAPIdemo&region=北京市\n打开链接即可开始导航，起点为你当前所在位置。\n- 目的地：中关村电子城\n- 导航链接（驾车）：https://api.map.baidu.com/direction?origin=name:起点|latlng:39.98387690325234,116.32495647899299&destination=name:终点|latlng:39.98927143503506,116.32417567184372&mode=driving&output=html&coord_type=bd09ll&src=webapp.baidu.openAPIdemo&region=北京市\n如需其他交通方式（公交/步行）或重新设定起点，请告知。\n以下信息来自网络搜索，仅供参考，不构成官方建议。\n简要结论\n- RTX 4090 的显卡功耗大约在 450W 左右，整机功耗则取决于 CPU、其它组件等。\n- NVIDIA 官方及多数评测普遍把最低电源容量定在 850W 及以上。\n按场景给出建议\n- 常规搭配（中端 CPU，如 Ryzen 5/7、Core i5/i7，且不超频）：\n  - 850W PSU 基本足够，注意选用质量好、具备原生 PCIe 5.0/ATX 3.0 接口和良好散热的型号。\n- 高端 CPU 或有超频需求（如 Ryzen 9、Core i9，或望意外超频/未来升级）：\n  - 1000W PSU 更稳妥，能提供更充裕的余量与稳定性。\n- 极端平台（如 Intel HEDT/Threadripper、计划多显、极限超频等）：\n  - 1300W 及以上有足够裕量，虽对单卡 RTX 4090 的日常用途而言并非必需，但也可提供更高的容错性和稳定性。\n注意事项\n- 优先选原生 12VHPWR 供电线缆，避免靠转接头，以降低接触不良和供电波动风险。\n- 选购时关注整机总功耗与单路 12V 输出能力，确保 PSU 的额定功率与输出容量匹配整机需求。\n参考来源（网络搜索结果摘录）\n- 3DMGame: “850W只是起步 RTX4090推荐电源最高可达1300W”——讨论不同 CPU 配置下的推荐电源容量，含 1300W 的极端建议。https://www.3dmgame.com/news/202212/3857698.html\n- Gamersky（游民星空转发版本）: “RTX4090用多少W电源 4090用什么电源”——官方说明推荐 850W 以上。https://wap.gamersky.com/gl/Content-1526232.html\n- 知乎: “NVIDIA 在发布时宣称 RTX 4090 需要 850W 及以上的电源”——官方表述摘要。https://zhuanlan.zhihu.com/p/569658069\n- 其他汇总/评测报道（包含“850W 起步，1000W/1300W 视平台而定”的观点）。例如相关报道合集。https://baijiahao.baidu.com/s?id=1857817961044632801&wfr=spider&for=pc\n如果你愿意，我可以根据你打算搭配的 CPU 型号、是否计划超频、机箱尺寸等，给出一个更贴合的具体电源容量推荐清单。"
+  }
+]

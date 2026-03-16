@@ -1,0 +1,17 @@
+2026-03-14 18:19:07,366 | ERROR    | ITS_App:33 | 发送请求，获取知识库下的知识失败了:Client error '405 Method Not Allowed' for url 'https://iknow.lenovo.com.cn/query'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
+2026-03-14 18:20:52,845 | ERROR    | ITS_App:36 | 未知的错误:Expecting value: line 1 column 1 (char 0)
+2026-03-14 18:21:58,391 | ERROR    | ITS_App:33 | 发送请求，获取知识库下的知识失败了:Client error '405 Method Not Allowed' for url 'https://iknow.lenovo.com.cn/query'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
+2026-03-14 18:22:27,587 | ERROR    | ITS_App:33 | 发送请求，获取知识库下的知识失败了:Client error '405 Method Not Allowed' for url 'https://iknow.lenovo.com.cn/query'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
+2026-03-14 18:23:26,994 | ERROR    | ITS_App:33 | 发送请求，获取知识库下的知识失败了:Client error '405 Method Not Allowed' for url 'https://iknow.lenovo.com.cn/query'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
+2026-03-14 18:26:06,979 | ERROR    | ITS_App:33 | 发送请求，获取知识库下的知识失败了:Client error '405 Method Not Allowed' for url 'https://iknow.lenovo.com.cn/query'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
+2026-03-14 18:30:59,340 | ERROR    | ITS_App:33 | 发送请求，获取知识库下的知识失败了:
+2026-03-14 18:32:44,102 | ERROR    | ITS_App:33 | 发送请求，获取知识库下的知识失败了:
+2026-03-14 18:33:42,906 | ERROR    | ITS_App:33 | 发送请求，获取知识库下的知识失败了:Client error '405 Method Not Allowed' for url 'https://iknow.lenovo.com.cn/query'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
+2026-03-14 18:39:55,250 | ERROR    | ITS_App:33 | 发送请求，获取知识库下的知识失败了:
+2026-03-14 22:50:24,445 | ERROR    | ITS_App:34 | 发送请求，获取知识库下的知识失败了:HTTPStatusError("Server error '502 Bad Gateway' for url 'http://127.0.0.1:8001/query'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502")
