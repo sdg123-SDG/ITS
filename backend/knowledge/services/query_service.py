@@ -14,11 +14,11 @@ class QueryService:
                               temperature=0)
         # temperature作用：控制模型输出的随机度 尽量不要让它乱发挥（尽最大努力保证：影响因素：硬件（并行gpu：精度变乱）网络（moe专家））
 
-    def generate_answer(self, user_question: str, retrival_context: List[Document]) -> str:
+    def generate_answer(self, query: str, retrival_context: List[Document]) -> str:
         """
         对接大语言模型的入口
         Args:
-            user_question: 用户问题
+            query: 用户问题
             retrival_context: 检索到的上下文
 
         Returns:
@@ -44,7 +44,7 @@ class QueryService:
 
          【用户问题】：
          ```
-         {user_question}
+         {query}
          ```
 
          【回答要求】：

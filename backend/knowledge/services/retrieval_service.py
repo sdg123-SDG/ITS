@@ -3,6 +3,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 from langchain_core.documents import Document
+from langchain_core.runnables import RunnableParallel, RunnableLambda
 from sentence_transformers import CrossEncoder
 from hashlib import sha256
 
@@ -18,8 +19,9 @@ class RetrievalService:
         RAG的检索器
         执行流程：
         1. LLM对用户的query进行改写，生成多个类似的问题（多查询）
-        2. 根据多路问题分别检索向量库，合并文档并去重（初筛召回）
-        3. 利用 Reranker (重排序模型) 对召回的文档进行精准打分，保留最相关的 Top-K (精排过滤)
+        2、使用HyDE对query进行假设性的生成，以弥补原query和文档之间的差异
+        3. 根据多路问题分别检索向量库，合并文档并去重（初筛召回）
+        4. 利用 Reranker (重排序模型) 对召回的文档进行精准打分，保留最相关的 Top-K (精排过滤)
     """
 
     def __init__(self, k: int):
@@ -65,7 +67,7 @@ class RetrievalService:
 
     def custom_rerank_documents(self, query: str, documents: List[Document], top_n: int) -> List[Document]:
         """
-        原生手写的重排序函数
+        重排序函数
         """
         if not documents:
             return []
@@ -96,7 +98,7 @@ class RetrievalService:
         multi_query_prompt = PromptTemplate.from_template(
             """
             你是一名AI语言模型助理。你的任务是生成给定问题的{query_num}个不同版本，以从矢量数据库中检索相关文档。
-            你需要通过从多个视角生成问题，来克服基于距离的相似性搜索的一些局限性。请使用换行符分隔备选问题。
+            你需要通过从多个视角生成问题，来克服基于距离的相似性搜索的一些局限性。请将备选问题汇总在列表中，每个备选问题之间使用逗号间隔开。
 
             原始问题：{query}
             """
@@ -107,21 +109,39 @@ class RetrievalService:
                 | self.llm
                 | StrOutputParser()
         )
+        # 3、HyDE提示模板
+        hyde_prompt = PromptTemplate.from_template(
+            """
+            请根据常识和推理，为问题编写一段看起来合理且详细的回答性段落，哪怕你不确定真实答案。
+
+            问题：{query}
+            """
+        )
+        # 4、假设生成链
+        hyde_chain = (
+           hyde_prompt
+           | self.llm
+           | StrOutputParser()
+        )
+        # 并行执行：同时生成 多查询 + HyDE答案
+        parallel_chain = RunnableParallel(
+            queries=expend_query_chain,
+            hyde=hyde_chain
+        )
 
         multi_query_chain = (
-                {
-                    'query_num': lambda x: x['query_num'],
-                    'query': lambda x: x['query']
-                }  # 添加一个参数，用于控制生成多少个查询
-                | expend_query_chain  # 生成多个查询
-                | (lambda x: x + '\n' + query)
-                | (lambda x: [self.retriever.invoke(q) for q in x.split('\n') if q.strip()])  # 遍历检索多个查询
+                RunnableLambda(lambda x: {"query_num": multi_query_num, "query": query})
+                | parallel_chain
+                # 合并为最终检索列表：N个问题 + 1个答案 + 原始问题（全覆盖）
+                | RunnableLambda(lambda x: [q.strip() for q in x["queries"].split(",") if q.strip()] + [x["hyde"], query])
+                # 多路检索
+                | RunnableLambda(lambda x: self.retriever.batch(x))
                 | self.get_unique_docs  # 文档去重
         )
 
         unique_docs = multi_query_chain.invoke({'query': query, 'query_num': multi_query_num})
 
-        final_docs = self.custom_rerank_documents(query=query, documents=unique_docs, top_n=self.k)
+        final_docs = self.custom_rerank_documents(query=query, documents=unique_docs, top_n=1)
 
         return final_docs
 
