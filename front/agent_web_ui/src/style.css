@@ -1,36 +1,28 @@
-/* 全局科技感主题变量 */
+/* ==========================================================
+   传统水墨书画风格 (Ink and Wash Style) - 灵动圆润版
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;700&display=swap');
+
 :root {
-  --tech-bg-dark: #0a192f;
-  --tech-bg-light: #112240;
-  --tech-primary: #64ffda;
-  --tech-text-main: #e6f1ff;
-  --tech-text-muted: #8892b0;
-  --tech-border: #233554;
-  --tech-card-bg: rgba(17, 34, 64, 0.75);
-  
-  font-family: 'Inter', 'Fira Code', monospace, system-ui, sans-serif;
-  line-height: 1.5;
+  /* 水墨调色板 */
+  --ink-bg-paper: #f9f8f4; /* 宣纸白微黄 */
+  --ink-bg-sidebar: #2c2b29; /* 砚台黑/深炭灰 */
+  --ink-bg-sidebar-hover: #3d3b38;
+  --ink-text-main: #1a1a1a; /* 浓墨 */
+  --ink-text-muted: #5e5e5e; /* 淡墨 */
+  --ink-text-light: #e0dcd3; /* 侧边栏反白字 */
+  --ink-border: #d4d0c8; /* 浅墨线 */
+  --ink-border-dark: #3a3a3a;
+  --ink-seal-red: #b32a2a; /* 朱砂印章红 */
+  --ink-seal-hover: #8f1f1f;
+
+  /* 字体设定为宋体/明朝体等传统衬线体 */
+  font-family: 'Noto Serif SC', 'STSong', 'SimSun', 'KaiTi', serif;
+  line-height: 1.8;
   font-weight: 400;
-
-  color-scheme: dark;
-  color: var(--tech-text-main);
-  background-color: var(--tech-bg-dark);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: var(--tech-primary);
-  text-decoration: inherit;
-  transition: all 0.3s ease;
-}
-a:hover {
-  color: #535bf2;
-  text-shadow: 0 0 8px rgba(100, 255, 218, 0.3);
+  color: var(--ink-text-main);
+  background-color: var(--ink-bg-paper);
 }
 
 body {
@@ -39,13 +31,10 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background-color: var(--tech-bg-dark);
-  /* 科技感网格背景 */
-  background-image: 
-    linear-gradient(rgba(100, 255, 218, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(100, 255, 218, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
-  color: var(--tech-text-main);
+  background-color: var(--ink-bg-paper);
+  /* 极淡的宣纸纹理感 */
+  background-image: radial-gradient(#d4d0c8 0.5px, transparent 0.5px);
+  background-size: 20px 20px;
 }
 
 #app {
@@ -53,73 +42,17 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  position: relative;
-  /* 径向渐变增加深度 */
-  background: radial-gradient(circle at 50% 50%, rgba(20, 40, 60, 0.3) 0%, rgba(10, 25, 47, 0.8) 100%);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  color: var(--tech-text-main);
-  text-shadow: 0 0 10px rgba(100, 255, 218, 0.2);
-}
-
-/* 按钮样式变体 */
+/* 基础组件通用样式 */
 button {
-  border-radius: 4px; /* 更方正的科技感圆角 */
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+  border-radius: 2px;
+  border: none;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.25s ease;
-  backdrop-filter: blur(4px);
-}
-
-.btn-primary {
-  background-color: rgba(100, 255, 218, 0.1);
-  border: 1px solid var(--tech-primary);
-  color: var(--tech-primary);
-  box-shadow: 0 0 10px rgba(100, 255, 218, 0.1);
-}
-.btn-primary:hover {
-  background-color: rgba(100, 255, 218, 0.2);
-  box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  background-color: transparent;
-  border: 1px solid var(--tech-text-muted);
-  color: var(--tech-text-muted);
-}
-.btn-secondary:hover {
-  border-color: var(--tech-primary);
-  color: var(--tech-primary);
-}
-
-.btn-tertiary {
-  background-color: transparent;
-  border: none;
-  color: var(--tech-text-muted);
-  padding: 0.4em 0.8em;
-}
-.btn-tertiary:hover {
-  color: var(--tech-primary);
-  background-color: rgba(100, 255, 218, 0.05);
-}
-
-.card {
-  padding: 2em;
-  background-color: var(--tech-card-bg);
-  border: 1px solid var(--tech-border);
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
 }
 
 .app-container {
@@ -128,689 +61,427 @@ button {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  margin: 0;
-  padding: 0;
-  position: relative;
 }
 
-/* 主内容区域 */
 .main-content {
   display: flex;
   flex: 1;
   overflow: hidden;
-  min-height: 0;
-  position: relative;
 }
 
-/* 用户头像样式 */
-.top-user-section {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: -10px;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 100;
-}
-
-.user-avatar-container {
-  position: relative;
-  display: inline-block;
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid var(--tech-primary);
-  transition: all 0.3s ease;
-  box-shadow: 0 0 10px rgba(100, 255, 218, 0.2);
-}
-
-.user-avatar:hover {
-  border-color: #fff;
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
-}
-
-/* 用户信息下拉框样式 - 深色科技风 */
-.user-info-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 12px;
-  background-color: var(--tech-bg-light);
-  border: 1px solid var(--tech-border);
-  border-radius: 8px;
-  box-shadow: 0 10px 30px -10px rgba(2, 12, 27, 0.7);
-  padding: 12px 16px;
-  min-width: 160px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  backdrop-filter: blur(10px);
-}
-
-.user-name {
-  color: var(--tech-text-main);
-  font-weight: 500;
-  font-size: 14px;
-  border-bottom: 1px solid var(--tech-border);
-  padding-bottom: 8px;
-  margin-bottom: 4px;
-}
-
-.user-info-dropdown .logout-button,
-.user-info-dropdown .login-button {
-  width: 100%;
-  margin-top: 4px;
-  padding: 6px 12px;
-  font-size: 14px;
-}
-
-/* 侧边栏样式 - 透明深色 */
+/* ================== 侧边栏 (砚台色) ================== */
 .sidebar-wrapper {
   position: relative;
   display: flex;
   z-index: 50;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.1);
 }
 
 .sidebar-content {
   width: 60px;
-  background-color: rgba(17, 34, 64, 0.8);
-  border-right: 1px solid var(--tech-border);
+  background-color: var(--ink-bg-sidebar);
+  color: var(--ink-text-light);
   display: flex;
   flex-direction: column;
-  transition: width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   overflow: hidden;
   height: 100%;
-  position: relative;
-  backdrop-filter: blur(10px);
+  border-right: 2px solid #1a1a1a;
 }
 
 .sidebar-content.expanded {
-  width: 256px;
-  position: relative;
+  width: 260px;
 }
 
 .app-branding {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 15px 12px;
-  border-bottom: 1px solid var(--tech-border);
-  margin: 0;
-  background: rgba(10, 25, 47, 0.5);
+  justify-content: space-between;
+  padding: 20px 16px;
+  border-bottom: 1px dashed var(--ink-border-dark);
 }
 
-.sidebar-text-content {
-  display: flex;
-  align-items: center;
-}
-
-.its-title {
-  font-size: 18px;
-  margin: 0;
-  color: var(--tech-text-main);
-  font-weight: 600;
-  white-space: nowrap;
-  letter-spacing: 1px;
-}
-
-.new-session-button {
-  background-color: transparent;
-  border: 1px solid var(--tech-primary);
-  color: var(--tech-primary);
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 10px;
-  transition: all 0.3s ease;
-}
-
-.new-session-button:hover {
-  background-color: rgba(100, 255, 218, 0.1);
-  box-shadow: 0 0 10px rgba(100, 255, 218, 0.1);
-}
-
-/* 导航栏样式 */
-.navigation-container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 10px;
-  border-bottom: 1px solid var(--tech-border);
-}
-
-.navigation-item {
+/* 侧边栏菜单项 */
+.navigation-item, .session-item {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  color: var(--tech-text-muted);
+  margin: 4px 12px;
+  color: var(--ink-text-light);
   cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.95rem;
-  margin-bottom: 2px;
+  border-radius: 8px; /* 侧边栏元素也稍微变圆润 */
+  font-size: 15px;
+  transition: background-color 0.3s;
+  border-left: 2px solid transparent;
 }
 
-.navigation-item:hover {
-  background-color: rgba(100, 255, 218, 0.05);
-  color: var(--tech-primary);
-  transform: translateX(4px);
-  box-shadow: -2px 0 0 var(--tech-primary);
+.navigation-item:hover, .session-item:hover {
+  background-color: var(--ink-bg-sidebar-hover);
 }
 
-.navigation-item.selected {
-  background-color: rgba(100, 255, 218, 0.1);
-  color: var(--tech-primary);
-  box-shadow: -2px 0 0 var(--tech-primary);
-}
-
-.nav-icon {
-  font-size: 1.2em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-}
-
-.nav-text {
-  white-space: nowrap;
-}
-
-/* 历史会话列表样式 */
-.session-item {
-  padding: 12px;
-  margin-bottom: 8px;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 1px solid transparent;
-  background-color: rgba(255, 255, 255, 0.02);
-  position: relative;
-  overflow: hidden;
-  color: var(--tech-text-muted);
-}
-
-.session-item:hover {
-  background-color: rgba(100, 255, 218, 0.05);
-  border-color: rgba(100, 255, 218, 0.2);
-  color: var(--tech-text-main);
-}
-
-.session-item.selected {
-  background-color: rgba(100, 255, 218, 0.1);
-  border-color: var(--tech-primary);
-  color: var(--tech-text-main);
-}
-
-.session-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.navigation-item.selected, .session-item.selected {
+  background-color: var(--ink-bg-sidebar-hover);
+  border-left: 3px solid var(--ink-seal-red); /* 朱砂红点缀 */
+  font-weight: bold;
+  color: #fff;
 }
 
 .session-preview {
-  font-size: 0.9em;
-  color: var(--tech-text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.5;
-}
-
-.session-item:hover .session-preview,
-.session-item.selected .session-preview {
-  color: var(--tech-text-main);
 }
 
 .sidebar-main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.sessions-list {
-  flex: 1;
   overflow-y: auto;
   margin-top: 10px;
-  padding: 0 10px;
 }
 
-.sessions-list::-webkit-scrollbar,
-.chat-message-container::-webkit-scrollbar {
-  width: 6px;
+.sessions-list::-webkit-scrollbar {
+  width: 4px;
 }
-.sessions-list::-webkit-scrollbar-thumb,
-.chat-message-container::-webkit-scrollbar-thumb {
-  background-color: var(--tech-border);
-  border-radius: 3px;
+.sessions-list::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
 }
-.sessions-list::-webkit-scrollbar-track,
-.chat-message-container::-webkit-scrollbar-track {
+
+/* 新建会话按钮 */
+.session-button-container {
+  padding: 16px 12px 8px 12px;
+}
+.new-chat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
   background-color: transparent;
+  color: var(--ink-text-light);
+  border: 1px solid var(--ink-border-dark);
+  border-radius: 8px;
+  font-size: 15px;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+.new-chat-btn:hover {
+  background-color: var(--ink-bg-sidebar-hover);
+  border-color: var(--ink-seal-red);
 }
 
 .toggle-sidebar-btn {
-  position: absolute;
-  top: 50%;
-  right: -12px;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  background-color: var(--tech-bg-light);
-  color: var(--tech-primary);
-  border: 1px solid var(--tech-border);
-  border-radius: 50%;
-  outline: none;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  background: transparent;
+  color: var(--ink-text-light);
+  border: none;
+  font-size: 20px;
 }
 
-.toggle-sidebar-btn:hover {
-  background-color: var(--tech-border);
-  color: #fff;
-  transform: translateY(-50%) scale(1.1);
-}
-
+/* ================== 主内容区 & 用户头像 ================== */
 .main-container {
-  flex: 1 1 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  background-color: transparent;
   position: relative;
-  transition: all 0.3s ease;
-  background: transparent;
-  min-height: 0;
-  overflow: hidden;
 }
 
 .result-container {
-  flex: 1 1 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  position: relative;
   height: 100%;
-  overflow: hidden;
-  min-height: 0;
 }
 
-/* ==========================================================
-   升级版：主流AI聊天气泡风格 (Chat Bubble UI)
-   ========================================================== */
+.top-user-section {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  z-index: 1000;
+}
 
-/* 聊天消息容器 */
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%; /* 顶部头像改为正圆 */
+  cursor: pointer;
+  border: 2px solid var(--ink-border);
+  background-color: #fff;
+  object-fit: cover;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+}
+.user-avatar:hover {
+  transform: scale(1.05);
+}
+
+.user-info-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 10px;
+  background-color: var(--ink-bg-paper);
+  border: 1px solid var(--ink-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  padding: 16px;
+  min-width: 160px;
+  z-index: 1001;
+}
+
+.user-name {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--ink-text-main);
+  margin-bottom: 12px;
+  border-bottom: 1px dashed var(--ink-border);
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.logout-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--ink-seal-red);
+  color: var(--ink-seal-red);
+  padding: 6px 0;
+  border-radius: 16px;
+}
+.logout-btn:hover {
+  background: var(--ink-seal-red);
+  color: #fff;
+}
+
+/* ================== 聊天气泡区域 (水墨晕染排版) ================== */
 .chat-message-container {
-  flex: 1 1 0;
+  flex: 1;
   overflow-y: auto;
-  padding: 20px 15% 140px 15%; /* 左右留出空间，让气泡更居中紧凑 */
+  padding: 60px 0 160px 0;
   display: flex;
   flex-direction: column;
-  gap: 28px; /* 增大不同消息之间的间距 */
+  gap: 36px;
   scroll-behavior: smooth;
 }
 
 .message-wrapper {
   display: flex;
   width: 100%;
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
-  animation: fadeIn 0.3s ease-out;
-  gap: 16px; /* 头像和气泡之间的距离 */
+  padding: 0 24px;
+  gap: 16px;
+  box-sizing: border-box;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* --- 用户和AI的对齐方向 --- */
-.message-wrapper.user {
-  justify-content: flex-end; /* 用户靠右 */
-}
-
-.message-wrapper.assistant,
-.message-wrapper.THINKING {
-  justify-content: flex-start; /* AI靠左 */
-}
-
-/* --- 聊天头像统一尺寸 --- */
 .chat-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* 聊天头像改为正圆，契合圆润主题 */
   flex-shrink: 0;
-  overflow: hidden;
-  border: 2px solid rgba(100, 255, 218, 0.2);
-  background-color: var(--tech-bg-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: 1px solid var(--ink-border);
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.05);
 }
-
 .chat-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.chat-avatar.ai-avatar {
-  padding: 6px; /* 给 ITS Logo 留出一点内边距 */
-  border-color: var(--tech-primary);
+.ai-avatar {
+  background-color: var(--ink-bg-paper);
+  border: 2px solid var(--ink-seal-red);
+  color: var(--ink-seal-red);
+}
+.ink-avatar-text {
+  font-family: 'KaiTi', 'STKaiti', serif;
+  font-size: 22px;
+  font-weight: bold;
 }
 
-/* --- 消息主体 (气泡外壳) --- */
 .message-body {
   display: flex;
   flex-direction: column;
-  max-width: 75%; /* 限制气泡最大宽度，防止太长 */
+  max-width: 85%;
 }
 
+.message-wrapper.user {
+  justify-content: flex-end;
+}
 .message-wrapper.user .message-body {
-  align-items: flex-end; /* 用户气泡文字靠右生长 */
+  align-items: flex-end;
 }
 
-.message-wrapper.assistant .message-body,
-.message-wrapper.THINKING .message-body {
-  align-items: flex-start; /* AI气泡文字靠左生长 */
+/* --- 核心动画：墨色流淌 --- */
+@keyframes inkFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* --- 核心气泡样式 --- */
-.message-bubble {
-  padding: 10px 16px; /* 微微减小内边距，配合小字体更精致 */
-  font-size: 14px; /* 【优化】字体统一调小到 14px */
-  line-height: 1.6;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-}
-
-/* 强制调整 Markdown 渲染内容里的所有字体大小 */
-.message-bubble .markdown-body,
-.message-bubble .markdown-body p,
-.message-bubble .markdown-body * {
-  font-size: 14px !important;
-}
-
-/* 1. 用户气泡：【降低亮度】改为高级的柔和暗光蓝 */
+/* --- 用户气泡：淡墨流转 --- */
 .message-wrapper.user .message-bubble {
-  background-color: rgba(33, 150, 243, 0.15); /* 极低饱和度的半透明蓝 */
-  border: 1px solid rgba(33, 150, 243, 0.3); /* 微微的蓝色边框提神 */
-  border-radius: 16px 4px 16px 16px;
+  /* 使用略深一点的水墨渐变来制造流动感 */
+  background: linear-gradient(135deg, rgba(0,0,0,0.02), rgba(0,0,0,0.06), rgba(0,0,0,0.02));
+  background-size: 200% 200%;
+  animation: inkFlow 8s ease infinite; /* 绑定流动动画 */
+
+  color: var(--ink-text-main);
+  border: 1px solid rgba(0,0,0,0.08); /* 极细的水痕边框 */
+
+  /* 圆润造型：右上、左上、左下大圆角，右下收尖如水滴 */
+  border-radius: 24px 24px 4px 24px;
+  padding: 12px 20px;
+  font-size: 16px;
+
+  /* 外层扩散阴影 + 内层高光，形成立体水洼感 */
+  box-shadow: 2px 4px 12px rgba(0,0,0,0.04), inset 0 0 15px rgba(255,255,255,0.4);
 }
 
-/* 【优化】因为背景变暗了，所以恢复用户气泡里的文字为浅色，保持高级感 */
-.message-wrapper.user .message-bubble .markdown-body,
-.message-wrapper.user .message-bubble .markdown-body p,
-.message-wrapper.user .message-bubble .markdown-body * {
-  color: var(--tech-text-main) !important;
-}
-
-/* 2. AI 助手气泡：深蓝磨砂玻璃效果（保持不变） */
+/* --- AI 气泡：宣白流转 --- */
 .message-wrapper.assistant .message-bubble {
-  background-color: var(--tech-card-bg);
-  border: 1px solid var(--tech-border);
-  color: var(--tech-text-main);
-  border-radius: 4px 16px 16px 16px;
-  backdrop-filter: blur(10px);
+  /* AI气泡使用提亮的宣纸白来和底层(偏黄)进行区分 */
+  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,1), rgba(255,255,255,0.6));
+  background-size: 200% 200%;
+  animation: inkFlow 8s ease infinite reverse;
+
+  color: var(--ink-text-main);
+  border: 1px solid rgba(0,0,0,0.04);
+
+  /* 圆润造型：右上、左上、右下大圆角，左下收尖 */
+  border-radius: 24px 24px 24px 4px;
+  padding: 16px 20px;
+  font-size: 16px;
+
+  box-shadow: 2px 4px 15px rgba(0,0,0,0.03), inset 0 0 8px rgba(0,0,0,0.01);
 }
 
-/* 3. AI 思考过程气泡：虚线边框，半透明（保持不变） */
-.message-wrapper.THINKING .message-bubble {
-  background: rgba(10, 25, 47, 0.5);
-  border: 1px dashed rgba(100, 255, 218, 0.5);
-  border-radius: 4px 16px 16px 16px;
-  color: var(--tech-text-muted);
-  font-family: 'Fira Code', monospace;
-  font-size: 13px; /* 思考过程的字体再稍微小一点点，以示区分 */
+/* Markdown 字体强化为衬线体 */
+.markdown-body {
+  color: var(--ink-text-main) !important;
+  font-family: inherit !important;
+  font-size: 16px !important;
+  background: transparent !important;
+  letter-spacing: 0.5px;
+}
+.markdown-body pre {
+  background-color: rgba(0,0,0,0.03) !important; /* 墨色浅底 */
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+}
+.markdown-body code {
+  color: var(--ink-seal-red) !important;
+  background-color: transparent !important;
 }
 
-/* 思考过程头部标签美化 */
+/* 思考过程 - 淡墨痕迹 */
 .thinking-header {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(100, 255, 218, 0.05);
-  border: 1px solid rgba(100, 255, 218, 0.2);
-  padding: 4px 12px;
-  border-radius: 20px;
-  margin-bottom: 8px;
-  color: var(--tech-primary);
-  font-size: 0.85em;
+  color: var(--ink-text-muted);
+  font-size: 14px;
   cursor: pointer;
+  padding: 4px 0;
+  font-style: italic;
+  opacity: 0.8;
+}
+.message-wrapper.THINKING .message-bubble {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  animation: none;
+  border-left: 2px dashed rgba(0,0,0,0.15);
+  border-radius: 0;
+  padding-left: 16px;
+  margin-left: 8px;
+  color: var(--ink-text-muted);
 }
 
-.thinking-header:hover {
-  background: rgba(100, 255, 218, 0.1);
-}
-
-.thinking-icon {
-  transition: transform 0.3s ease;
-}
-
-.thinking-icon.collapsed {
-  transform: rotate(-90deg);
-}
-
-/* ==========================================================
-   输入框及其他功能样式
-   ========================================================== */
-
-/* 输入框区域 - 悬浮在底部 */
+/* ================== 底部输入框 ================== */
 .input-container {
   position: absolute;
-  bottom: 30px;
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60%;
+  width: 100%;
   max-width: 800px;
+  padding: 0 24px;
+  box-sizing: border-box;
   z-index: 100;
 }
 
 .textarea-with-button {
   position: relative;
-  background: rgba(17, 34, 64, 0.95);
-  border: 1px solid var(--tech-border);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  padding: 0;
-  backdrop-filter: blur(10px);
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-  background-clip: border-box;
+  background: rgba(255,255,255,0.85); /* 半透白底，微微透出底层的纸纹 */
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--ink-border);
+  border-radius: 24px; /* 输入框也变得非常圆润 */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06), inset 0 0 10px rgba(0,0,0,0.01);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .textarea-with-button:focus-within {
-  border-color: var(--tech-primary);
-  box-shadow: 0 0 20px rgba(100, 255, 218, 0.1);
+  border-color: rgba(0,0,0,0.3);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(0,0,0,0.01);
 }
 
 textarea {
   width: 100%;
-  background: transparent !important;
-  border: none !important;
-  color: var(--tech-text-main);
-  font-size: 1rem;
+  background: transparent;
+  border: none;
+  color: var(--ink-text-main);
+  font-size: 16px;
   resize: none;
-  outline: none !important;
-  min-height: 50px;
+  outline: none;
+  min-height: 80px;
   max-height: 200px;
-  padding: 12px 90px 12px 12px;
+  padding: 20px 140px 20px 24px;
   font-family: inherit;
-  box-shadow: none !important;
-  margin: 0;
   box-sizing: border-box;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
+/* 印章式发送按钮 */
 .send-button {
   position: absolute;
-  right: 6px;
-  bottom: 6px;
-  padding: 6px 16px;
-  font-size: 0.9rem;
-  min-width: 64px;
-  white-space: nowrap;
+  right: 16px;
+  bottom: 16px;
+  width: 90px;
+  height: 44px;
+  background-color: transparent;
+  color: var(--ink-seal-red);
+  border: 2px solid var(--ink-seal-red);
+  border-radius: 12px; /* 按压印章略带圆角 */
+  font-family: 'KaiTi', 'STKaiti', serif;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  background-color: rgba(100, 255, 218, 0.2);
-  border: 1px solid var(--tech-primary);
-  color: var(--tech-primary);
-  box-shadow: 0 0 10px rgba(100, 255, 218, 0.1);
   transition: all 0.3s ease;
 }
 
-.send-button:hover {
-  background-color: var(--tech-primary);
-  color: var(--tech-bg-dark);
-  box-shadow: 0 4px 20px rgba(100, 255, 218, 0.5);
+.send-button:hover:not(:disabled) {
+  background-color: var(--ink-seal-red);
+  color: #fff;
+  box-shadow: 0 6px 15px rgba(179, 42, 42, 0.25);
   transform: translateY(-2px);
 }
 
 .send-button:disabled {
-  background-color: transparent;
-  border-color: var(--tech-text-muted);
-  color: var(--tech-text-muted);
-  cursor: not-allowed;
+  border-color: rgba(0,0,0,0.15);
+  color: rgba(0,0,0,0.3);
+  background: transparent;
   box-shadow: none;
-}
-
-/* Markdown Dark Mode Overrides */
-.markdown-body {
-  color: var(--tech-text-main) !important;
-  background-color: transparent !important;
-}
-.markdown-body pre {
-  background-color: rgba(0, 0, 0, 0.3) !important;
-  border: 1px solid var(--tech-border);
-}
-.markdown-body code {
-  background-color: rgba(100, 255, 218, 0.1) !important;
-  color: var(--tech-primary) !important;
-}
-
-/* 模型下拉菜单选项样式 */
-.model-option {
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.model-option:hover {
-  background-color: transparent !important;
-  color: var(--tech-primary);
-}
-
-.model-option.selected {
-  color: var(--tech-primary);
-  font-weight: bold;
-}
-
-/* 智能体流程卡片样式 */
-.tech-process-card {
-  background: rgba(17, 34, 64, 0.6);
-  border: 1px solid rgba(100, 255, 218, 0.2);
-  border-left: 3px solid var(--tech-primary);
-  border-radius: 4px;
-  padding: 10px 14px;
-  margin: 8px 0;
-  font-family: 'Fira Code', monospace;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.tech-process-card:hover {
-  background: rgba(17, 34, 64, 0.8);
-  border-color: var(--tech-primary);
-  box-shadow: 0 0 15px rgba(100, 255, 218, 0.15);
-}
-
-.tech-process-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85em;
-  color: var(--tech-text-muted);
-  border-bottom: 1px dashed rgba(100, 255, 218, 0.15);
-  padding-bottom: 4px;
-  margin-bottom: 2px;
-}
-
-.tech-process-header .tech-icon { font-size: 1.1em; }
-.tech-process-header .tech-label {
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-}
-
-.tech-process-flow {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  color: var(--tech-text-main);
-  font-size: 0.95em;
-}
-
-.tech-node {
-  background: rgba(100, 255, 218, 0.05);
-  padding: 2px 8px;
-  border-radius: 3px;
-  border: 1px solid transparent;
-}
-
-.tech-node.source { color: var(--tech-text-muted); }
-.tech-node.target {
-  color: var(--tech-primary);
-  border-color: rgba(100, 255, 218, 0.3);
-  font-weight: 500;
-}
-
-.tech-arrow {
-  color: var(--tech-text-muted);
-  font-weight: bold;
-  animation: pulse-arrow 1.5s infinite ease-in-out;
-}
-
-.tech-process-body { font-size: 0.95em; }
-.tech-process-body .highlight {
-  color: var(--tech-primary);
-  text-shadow: 0 0 5px rgba(100, 255, 218, 0.3);
-}
-
-.tech-process-card.agent-update { border-left-color: #bd34fe; }
-.tech-process-card.agent-update .tech-node.target,
-.tech-process-card.agent-update .highlight {
-   color: #bd34fe;
-   text-shadow: 0 0 5px rgba(189, 52, 254, 0.3);
-}
-
-@keyframes pulse-arrow {
-  0% { opacity: 0.4; transform: translateX(0); }
-  50% { opacity: 1; transform: translateX(2px); }
-  100% { opacity: 0.4; transform: translateX(0); }
+  cursor: not-allowed;
+  transform: none;
 }

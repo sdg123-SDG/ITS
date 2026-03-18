@@ -30,7 +30,7 @@
           {{ loginError }}
         </div>
         <button class="login-button btn-primary" @click="handleLogin">
-          登录
+          登 录
         </button>
         <div class="login-hint">
           <p>测试用户：root1, root2, root3</p>
@@ -65,7 +65,7 @@
                     <path d="M512 118.784c-223.96928 0-405.504 181.57568-405.504 405.504 0 78.76608 22.44608 152.3712 61.35808 214.6304l-44.27776 105.6768a61.44 61.44 0 0 0 56.68864 85.1968H512c223.92832 0 405.504-181.53472 405.504-405.504 0-223.92832-181.57568-405.504-405.504-405.504z m-331.776 405.504a331.776 331.776 0 1 1 331.73504 331.776H198.656l52.59264-125.5424-11.59168-16.62976A330.09664 330.09664 0 0 1 180.224 524.288z" fill="currentColor"></path>
                   </svg>
                 </span>
-                <span class="text">新建会话</span>
+                <span class="text">新建简牍</span>
                 <span class="shortcut">
                   <span class="key">Ctrl</span>
                   <span>+</span>
@@ -76,39 +76,26 @@
 
             <div class="navigation-container" v-show="isSidebarExpanded">
               <div class="navigation-item" :class="{ 'selected': selectedNavItem === 'knowledge' }" @click="handleKnowledgeBase">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" class="nav-icon">
-                  <path fill="currentColor" fill-rule="evenodd" d="M3.75 7h16.563c0 .48-.007 1.933-.016 3.685.703.172 1.36.458 1.953.837V5.937a2 2 0 0 0-2-2h-6.227a3 3 0 0 1-1.015-.176L9.992 2.677A3 3 0 0 0 8.979 2.5h-5.23a2 2 0 0 0-1.999 2v14.548a2 2 0 0 0 2 2h10.31a6.5 6.5 0 0 1-1.312-2H3.75S3.742 8.5 3.75 7m15.002 14.5a.514.514 0 0 0 .512-.454c.24-1.433.451-2.169.907-2.625.454-.455 1.186-.666 2.611-.907a.513.513 0 0 0-.002-1.026c-1.423-.241-2.155-.453-2.61-.908-.455-.457-.666-1.191-.906-2.622a.514.514 0 0 0-.512-.458.52.52 0 0 0-.515.456c-.24 1.432-.452 2.167-.907 2.624-.454.455-1.185.667-2.607.909a.514.514 0 0 0-.473.513.52.52 0 0 0 .47.512c1.425.24 2.157.447 2.61.9.455.454.666 1.19.907 2.634a.52.52 0 0 0 .515.452" clip-rule="evenodd"></path>
-                </svg>
-                <span class="nav-text">知识库查询</span>
+                <span class="nav-text">藏经阁 (知识库)</span>
               </div>
               <div class="navigation-item" :class="{ 'selected': selectedNavItem === 'service' }" @click="handleServiceStation">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" class="nav-icon">
-                  <path fill="currentColor" fill-rule="evenodd" d="M12 20.571a8.5 8.5 0 0 1 2.5-6.08c1.43-1.429 3.5-2.49 6.071-2.491-2.571.002-4.617-1.075-6.05-2.508S12 6 12 3.428C12 6 10.954 8.095 9.517 9.532 8.081 10.968 6 12 3.428 12a8.52 8.52 0 0 1 6.082 2.516c1.43 1.43 2.487 3.484 2.49 6.055m-9.853-7.314c3.485.588 5.053 1.331 6.163 2.44s1.847 2.667 2.435 6.198c.105.627.603 1.105 1.26 1.105.664 0 1.156-.479 1.25-1.11.588-3.502 1.329-5.085 2.441-6.2 1.111-1.114 2.677-1.845 6.16-2.433.638-.075 1.144-.586 1.144-1.253 0-.668-.5-1.188-1.147-1.254-3.481-.59-5.026-1.347-6.137-2.46-1.112-1.115-1.872-2.674-2.46-6.171C13.16 1.482 12.671 1 12.003 1c-.66 0-1.155.481-1.259 1.114-.588 3.5-1.323 5.087-2.435 6.203C7.2 9.43 5.632 10.159 2.156 10.75 1.503 10.816 1 11.333 1 12.004c0 .68.52 1.17 1.147 1.253" clip-rule="evenodd"></path>
-                </svg>
-                <span class="nav-text">服务站查询</span>
+                <span class="nav-text">驿站 (服务站)</span>
               </div>
               <div class="navigation-item" :class="{ 'selected': selectedNavItem === 'network' }" @click="handleNetworkSearch">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24" class="nav-icon">
-                  <path fill="currentColor" fill-rule="evenodd" d="M11 4a7 7 0 1 0 6.993 7.328c-.039-.53-.586-.93-1.131-.891a5.5 5.5 0 1 1-6.203-6.203.75.75 0 0 0-1.317-.63C4.617 5.458 2.75 8.425 2.75 12c0 4.418 3.582 8 8 8s8-3.582 8-8a7.961 7.961 0 0 0-1.996-5.38" clip-rule="evenodd"></path>
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-3.5-3.5"></path>
-                </svg>
-                <span class="nav-text">联网搜索</span>
+                <span class="nav-text">八方听风 (联网)</span>
               </div>
             </div>
 
             <div v-show="isSidebarExpanded" class="sidebar-main">
               <div class="navigation-item" @click="toggleSessions">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024" class="nav-icon">
-                  <path d="M512 81.066667c-233.301333 0-422.4 189.098667-422.4 422.4s189.098667 422.4 422.4 422.4 422.4-189.098667 422.4-422.4-189.098667-422.4-422.4-422.4z m-345.6 422.4a345.6 345.6 0 1 1 691.2 0 345.6 345.6 0 1 1-691.2 0z m379.733333-174.933334a38.4 38.4 0 0 0-76.8 0v187.733334a38.4 38.4 0 0 0 11.264 27.136l93.866667 93.866666a38.4 38.4 0 1 0 54.272-54.272L546.133333 500.352V328.533333z" fill="currentColor"></path>
-                </svg>
-                <span class="nav-text">历史会话</span>
+                <span class="nav-text">往期卷宗</span>
               </div>
               <div class="sessions-list" v-show="showSessions">
                 <div v-if="isLoadingSessions" class="loading-sessions">
-                  加载历史对话中...
+                  翻阅卷宗中...
                 </div>
                 <div v-else-if="sessions.length === 0" class="no-sessions">
-                  暂无历史对话
+                  尚无笔墨留存
                 </div>
                 <div
                   v-for="session in sessions"
@@ -118,8 +105,7 @@
                 >
                   <div class="session-info">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                      <img alt="豆包" src="//lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao/chat/static/image/default.light.2ea4b2b4.png" class="session-icon" style="width: 24px; height: 24px; border-radius: 4px; object-fit: cover;">
-                      <div class="session-preview">{{ session.memory[0]?.content || '空对话' }}</div>
+                      <div class="session-preview">{{ session.memory[0]?.content || '空白卷宗' }}</div>
                     </div>
                   </div>
                 </div>
@@ -130,10 +116,11 @@
 
         <div class="main-container">
           <div class="result-container" :class="{ 'processing': isProcessing }">
+
             <div class="top-user-section">
               <div class="user-avatar-container" ref="avatarContainerRef">
                 <img
-                  src="https://p3-flow-imagex-sign.byteimg.com/user-avatar/assets/e7b19241fb224cea967dfaea35448102_1080_1080.png~tplv-a9rns2rl98-icon-tiny.png?rcl=202511070904143F9B891FA2E40D7123F0&rk3s=8e244e95&rrcfp=76e58463&x-expires=1765155855&x-signature=nqQBx1W9ABfrm%2FRKkEYZUzsYjE0%3D"
+                  src="/avatar.png"
                   class="user-avatar"
                   alt="用户头像"
                   @click="toggleUserInfo"
@@ -143,10 +130,12 @@
                 <div class="user-info-dropdown" v-show="showUserInfo">
                   <template v-if="currentUser">
                     <span class="user-name">{{ currentUser }}</span>
-                    <button data-testid="setup_logout" class="btn-tertiary" style="width: 100%; justify-content: flex-start;" @click="handleLogout"><span role="img" class="semi-icon semi-icon-default text-16"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M14 3H4.5v18H14v-5h2v5a2 2 0 0 1-2 2H4.5a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v5h-2zm5.207 4.793a1 1 0 1 0-1.414 1.414L19.586 11H10.5a1 1 0 1 0 0 2h9.086l-1.793 1.793a1 1 0 0 0 1.414 1.414l3.5-3.5a1 1 0 0 0 0-1.414z" clip-rule="evenodd"></path></svg></span>退出登录</button>
+                    <button data-testid="setup_logout" class="btn-tertiary logout-btn" @click="handleLogout">
+                      退出登录
+                    </button>
                   </template>
                   <template v-else>
-                    <span class="user-name">当前未登录</span>
+                    <span class="user-name">尚未落座</span>
                     <button class="login-button btn-primary" @click="goToLogin">请登录</button>
                   </template>
                 </div>
@@ -157,28 +146,13 @@
               <div v-for="(msg, index) in chatMessages" :key="index" :class="['message-wrapper', msg.type]">
 
                  <div class="chat-avatar ai-avatar" v-if="msg.type === 'assistant' || msg.type === 'THINKING'">
-                   <img src="/its-logo.svg" alt="AI" />
+                   <span class="ink-avatar-text">智</span>
                  </div>
 
                  <div class="message-body">
                    <div class="message-role-label" v-if="msg.type === 'THINKING'" @click="toggleThinking(index)">
                      <div class="thinking-header">
-                       <span class="thinking-text">{{ isProcessing && index === chatMessages.length - 1 ? '深度思考中...' : '已完成思考' }}</span>
-                       <svg
-                         xmlns="http://www.w3.org/2000/svg"
-                         width="16"
-                         height="16"
-                         viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2"
-                         stroke-linecap="round"
-                         stroke-linejoin="round"
-                         class="thinking-icon"
-                         :class="{ 'collapsed': msg.collapsed }"
-                       >
-                         <polyline points="6 9 12 15 18 9"></polyline>
-                       </svg>
+                       <span class="thinking-text">{{ isProcessing && index === chatMessages.length - 1 ? '凝神推演中...' : '推演已毕' }}</span>
                      </div>
                    </div>
 
@@ -188,7 +162,7 @@
                  </div>
 
                  <div class="chat-avatar user-avatar-msg" v-if="msg.type === 'user'">
-                   <img src="https://p3-flow-imagex-sign.byteimg.com/user-avatar/assets/e7b19241fb224cea967dfaea35448102_1080_1080.png~tplv-a9rns2rl98-icon-tiny.png?rcl=202511070904143F9B891FA2E40D7123F0&rk3s=8e244e95&rrcfp=76e58463&x-expires=1765155855&x-signature=nqQBx1W9ABfrm%2FRKkEYZUzsYjE0%3D" alt="User" />
+                   <img src="/avatar.png" alt="User" />
                  </div>
 
               </div>
@@ -198,17 +172,17 @@
               <div class="textarea-with-button">
                 <textarea
                   v-model="userInput"
-                  placeholder="请输入您的请求..."
+                  placeholder="落笔于此..."
                   @keyup.enter.exact="handleSend($event)"
                   :disabled="isProcessing"
                 ></textarea>
                 <button
-                  class="send-button btn-primary"
+                  class="send-button"
                   :class="{ 'cancel-button': isProcessing, 'disabled': !userInput.trim() && !isProcessing }"
                   :disabled="!userInput.trim() && !isProcessing"
                   @click="isProcessing ? handleCancel() : handleSend()"
                 >
-                  {{ isProcessing ? '■' : '发送' }}
+                  {{ isProcessing ? '停 止' : '发 送' }}
                 </button>
               </div>
             </div>
@@ -433,9 +407,14 @@ export default {
       localStorage.removeItem('currentUserId');
     };
 
+    // 核心修复点：将清空输入框的操作提前到获取文本的第一时刻
     const handleSend = async (event) => {
       if (event) event.preventDefault();
-      if (!userInput.value.trim()) return;
+
+      const textToSend = userInput.value.trim(); // 1. 先把输入框的值存起来
+      if (!textToSend) return;
+
+      userInput.value = ''; // 2. 瞬间清空输入框，解决残留问题
       window.scrollTo(0, 0);
 
       const userId = localStorage.getItem('currentUserId');
@@ -452,10 +431,10 @@ export default {
       processMessages.value = [];
       chatMessages.value.push({
         type: 'user',
-        content: userInput.value.trim()
+        content: textToSend // 使用存起来的变量
       });
 
-      const userMessage = `<div class="user-message">${userInput.value.trim()}</div>\n\n`;
+      const userMessage = `<div class="user-message">${textToSend}</div>\n\n`;
       if (selectedSessionId.value && answerText.value) answerText.value += userMessage;
       else answerText.value = userMessage;
 
@@ -463,7 +442,7 @@ export default {
       scrollToBottom();
 
       const requestData = {
-        query: userInput.value.trim(),
+        query: textToSend, // 使用存起来的变量
         context: { user_id: finalUserId, session_id: selectedSessionId.value || '' }
       };
 
@@ -512,7 +491,6 @@ export default {
         scrollToBottom();
         fetchUserSessions();
       }
-      userInput.value = '';
     };
 
     const processSSEData = (data) => {
@@ -568,7 +546,7 @@ export default {
         reader = null;
       }
       isProcessing.value = false;
-      streamTextToProcess('请求已取消\n');
+      streamTextToProcess('推演已中止\n');
     };
 
     const streamTextToAnswer = (text) => {
@@ -678,209 +656,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
-/* Scoped样式精简，大部分由全局style.css接管 */
-.app-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 5px;
-  padding-bottom: 10px;
-  box-sizing: border-box;
-  min-height: 100vh;
-  overflow: hidden;
-}
-
-.main-content {
-  display: flex;
-  flex: 1;
-  gap: 20px;
-  overflow: hidden;
-}
-
-.sessions-sidebar {
-  width: 300px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
-  padding: 20px;
-}
-
-.login-form {
-  background: white;
-  border-radius: 12px;
-  padding: 40px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-}
-
-.login-logo {
-  margin: 0 auto 20px;
-}
-
-.login-title {
-  margin: 0 0 30px;
-  font-size: 28px;
-  font-weight: 700;
-  color: #333;
-  background: linear-gradient(90deg, #4CAF50, #2196F3);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.login-input-group {
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.login-input-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #555;
-}
-
-.login-input-group input {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 16px;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-}
-
-.login-error {
-  color: #f44336;
-  margin-bottom: 20px;
-  padding: 10px;
-  background-color: #ffebee;
-  border-radius: 4px;
-}
-
-.login-button {
-  width: 100%;
-  padding: 14px;
-  background-color: #2196F3;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.login-hint {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f5f5f5;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #666;
-}
-
-.display-container {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  min-height: 500px;
-}
-
-.result-container {
-  flex: 1;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-  height: auto;
-  box-sizing: border-box;
-  border-radius: 8px;
-  border: 1px solid #fff;
-}
-
-.result-container.processing {
-  animation: gradient-pulse 1.5s infinite ease-in-out;
-}
-
-@keyframes gradient-pulse {
-  0% { border-color: #fff; }
-  50% { border-color: #2196F3; }
-  100% { border-color: #fff; }
-}
-
-.input-container {
-  padding: 0;
-  margin-top: auto;
-}
-
-.textarea-with-button {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-  max-width: 50vw;
-}
-
-.textarea-with-button textarea {
-  width: 100%;
-  padding: 12px 48px 12px 12px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  resize: none;
-  height: 100px;
-  font-size: 16px;
-  font-family: inherit;
-}
-
-.textarea-with-button .send-button {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: none;
-  background-color: #4CAF50;
-  color: white;
-  font-size: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@media (max-width: 768px) {
-  .app-container {
-    padding: 8px;
-    gap: 8px;
-  }
-  .display-container {
-    flex-direction: column;
-    gap: 15px;
-  }
-  .result-container {
-    min-height: 180px;
-  }
-  .input-container textarea {
-    height: 80px;
-    font-size: 14px;
-  }
-}
+/* 避免样式污染，其余在全局控制 */
 </style>

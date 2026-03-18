@@ -39,7 +39,7 @@ if __name__ == '__main__':
     print(f"知识库1数据内容:\n{knowledge_content}")
 
     parser=HtmlParser()
-    md_content=parser.parse_html_to_markdown(1,knowledge_content)
+    md_content=parser.parse_html_to_markdown(1, knowledge_content)
 
     file_name_path=os.path.dirname(__file__)
 

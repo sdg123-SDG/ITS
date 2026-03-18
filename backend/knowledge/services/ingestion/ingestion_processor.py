@@ -1,113 +1,122 @@
-import os.path
-from wsgiref.validate import validator
+import os
+import logging
 
+# 注意：为了跨平台兼容性，建议这里的包名统一使用小写目录
 from repositories.vector_store_repository import VectorStoreRepository
-from langchain_community.document_loaders import TextLoader
-from langchain_text_splitters import  RecursiveCharacterTextSplitter
+from utils.markdown_utils import MarkDownUtils
+
+from langchain_community.document_loaders import TextLoader, UnstructuredPDFLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores.utils import filter_complex_metadata
-from  utils.markdown_utils import MarkDownUtils
-import  logging
+
 logging.basicConfig(level=logging.INFO)
-logger=logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
+
 
 class IngestionProcessor:
     """
-    文档摄入类：（摄入：加载、切分、存储）
+    文档摄入类：（载入：加载、切分、存储）
+    支持 Markdown (.md) 和 PDF (.pdf) 格式
     """
 
     def __init__(self):
-
         self.vector_store = VectorStoreRepository()
-        self.document_spliter=RecursiveCharacterTextSplitter(
-            chunk_size=1500,  # 长文档内容分块的阈值（略大一些。永远考虑语义优先）
-            chunk_overlap=200,# 给一定重合度
+        self.document_spliter = RecursiveCharacterTextSplitter(
+            chunk_size=1500,  # 长文档内容分块的阈值
+            chunk_overlap=200,  # 给一定重合度
             separators=[
                 "\n## ",
-                "\n**"
+                "\n**",  # 修复：补充了缺失的逗号
                 "\n\n",
                 "\n",
                 " ",
-                ""
+                "。"
             ]
         )
 
-    def ingest_file(self, md_path: str) -> int:
+    def ingest_file(self, file_path: str) -> int:
         """
         文档完整操作
         包含阶段：文件的加载->文档的切割->文档的存储
         Args:
-            md_path:文件的路径
+            file_path:文件的路径
 
         Returns:
           int: 保存成功的文档数
         """
-
-        # 1. 根据文件的路径加载得到文档列表
-        # a. 定义文档加载器（1.非结构化的文档加载器【MarkDownLoader】 2.文本加载器TextLoader:通用 保留md的语法标记）
-        try:
-            text_loader = TextLoader(file_path=md_path,encoding="utf-8")
-            # b. 加载文件返回文档列表(TextLoader返回的文档列表中有且只有一个文档对象)
-            documents = text_loader.load()
-        except Exception as e:
-            logger.error(f"文件：{md_path}没有加载到,原因:{str(e)}")
-            raise Exception(f"文件：{md_path}没有加载到,原因:{str(e)}")
-        # 1.为什么们要切分？ 目的：1.防止token限制  2.内容过多（大量噪音）--->LLM参考的上下文不精准。回复质量不好【1.二次利用模型对检索到大量内容的chunk 做降噪（1.只提取 2.总结）2.利用嵌入模型二次优化chunk】
-        # 2.到底要不要切？【文档内容大不大、多不多】如果文档内容比较多，一般都要切【上下文会断掉，语义不完整】。相反，如果内容较少，不用切（将整个内容作为一个完整的chunk[语义不丢]）
-        # ①.(改写查询)---1.学习大模型主要要学习哪些技术？ 2.在学习大模型阶段要学些哪些常见的技术栈 3. 4.
-        # ②. 用这4个问题去分别检索（多路召回） 1个query:4:answer  4个query:16:answer ---16个文档块（去重）--->10个（1:二次利用模型对检索到大量内容的chunk 2:.利用嵌入模型二次优化chunk）--->留4个--->LLM(1.稳 2.精准)
-
-
-        for doc in documents:
-            doc.metadata['title']=MarkDownUtils.extract_title(md_path)
-
-
-
-        # 2.切分文档得到文档块列表
-        # 2.1 动态机制切分
-        # a.如果文档内容不大，直接将这内容作为一个chunk(不用切分)
-        # b.如果内容比较大，分析大内容的数据结构，然后为他定制切分策略。采用header rejection:标题注入（保留没一块的业务背景、上下文）
-
-        final_document_chunks=[]
-        for doc in documents:
-            if len(doc.page_content)<3000:  # 评估一下小文件的内容长度（获取一个平均值）
-                # a.不用切分
-                final_document_chunks.append(doc)
-            else:
-                documents_chunks_list = self.document_spliter.split_documents(documents)
-                # b:没每个文档块的page_content注入标题（作为块的背景）
-                # page_content:来源:联想手机K900常见问题汇总 问题1：如何插拔SIM卡 K900采用Micro-Sim卡
-                for  document_chunk in documents_chunks_list:
-
-                    # 1.获取每一个文档块的标题
-                    md_path=document_chunk.metadata['source']
-
-                    title=os.path.basename(md_path)
-
-                    # 2.拼接到每一个文档块的page_content上
-                    document_chunk.page_content=f"文档来源:{title}\n{document_chunk.page_content}"
-                final_document_chunks.extend(documents_chunks_list)
-
-
-        #  3.切分后文档块的元数据校验(过滤不被向量数据库支持的元数据清除掉)
-        clean_documents_chunks=filter_complex_metadata(final_document_chunks)
-
-        #  4. 无效性检查（校验page_content的是否合法（不能为空））
-        valid_documents_chunks=[document for document in  clean_documents_chunks if document.page_content.strip()]
-
-        if not valid_documents_chunks:
-            logger.error("切分后的文档块没有任何的内容")
+        if not os.path.exists(file_path):
+            logger.error(f"文件不存在: {file_path}")
             return 0
 
-        # 5 .存储文档块到向量数据库
-        total_documents_chunks=self.vector_store.add_documents(valid_documents_chunks)
+        # 1. 获取文件后缀名，动态选择加载器
+        file_extension = os.path.splitext(file_path)[1].lower()
+        documents = []
 
+        try:
+            if file_extension in ['.md', '.txt']:
+                logger.info(f"正在使用 TextLoader 加载文本/MD文件: {file_path}")
+                text_loader = TextLoader(file_path=file_path, encoding="utf-8")
+                documents = text_loader.load()
+                # 针对 MD 文件提取特定标题
+                title = MarkDownUtils.extract_title(file_path)
 
-        # 6 .返回保存成功的文档块数
+            elif file_extension == '.pdf':
+                logger.info(f"正在使用 UnstructuredPDFLoader 加载 PDF 文件: {file_path}")
+                pdf_loader = UnstructuredPDFLoader(
+                    file_path=file_path,
+                    mode='elements',
+                    strategy='hi_res',
+                    infer_table_structure=True,
+                    language=['eng', 'chi_sim']
+                )
+                documents = pdf_loader.load()
+                # PDF 默认使用文件名作为标题
+                title = os.path.splitext(os.path.basename(file_path))[0]
+
+            else:
+                logger.error(f"暂不支持的文件格式: {file_extension}")
+                return 0
+
+        except Exception as e:
+            logger.error(f"文件：{file_path} 加载失败, 原因:{str(e)}")
+            raise Exception(f"文件：{file_path} 加载失败, 原因:{str(e)}")
+
+        # 统一注入基础标题 metadata
+        for doc in documents:
+            doc.metadata['title'] = title
+
+        # 2.切分文档得到文档块列表
+        final_document_chunks = []
+        for doc in documents:
+            # a.如果文档内容不大，直接将这内容作为一个chunk(不用切分)
+            if len(doc.page_content) < 3000:
+                doc.page_content = f"文档来源:{title}\n{doc.page_content}"
+                final_document_chunks.append(doc)
+            else:
+                # b.如果内容比较大，仅对当前长文档进行切分 (修复了原代码 split_documents(documents) 的问题)
+                documents_chunks_list = self.document_spliter.split_documents([doc])
+
+                # 遍历切分后的块，注入标题上下文
+                for document_chunk in documents_chunks_list:
+                    document_chunk.page_content = f"文档来源:{title}\n{document_chunk.page_content}"
+
+                final_document_chunks.extend(documents_chunks_list)
+
+        # 3.切分后文档块的元数据校验(非常重要：UnstructuredPDFLoader 会生成复杂嵌套字典，必须过滤)
+        clean_documents_chunks = filter_complex_metadata(final_document_chunks)
+
+        # 4. 无效性检查（校验page_content是否合法，剔除纯空白块）
+        valid_documents_chunks = [document for document in clean_documents_chunks if
+                                  document.page_content and document.page_content.strip()]
+
+        if not valid_documents_chunks:
+            logger.warning(f"文件 {file_path} 切分后的文档块没有任何有效内容")
+            return 0
+
+        # 5.存储文档块到向量数据库
+        total_documents_chunks = self.vector_store.add_documents(valid_documents_chunks)
+
+        logger.info(f"文件 {file_path} 摄入完成，共计 {total_documents_chunks} 个有效文档块入库。")
+
+        # 6.返回保存成功的文档块数
         return total_documents_chunks
-
-
-
-
-
-
-

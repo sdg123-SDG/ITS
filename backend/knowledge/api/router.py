@@ -13,13 +13,11 @@ from services.retrieval_service import RetrievalService
 from services.query_service import QueryService
 from config.settings import settings
 
-
-
 # 1.创建APIRouter
 router = APIRouter()
 # 2. 创建应用的实例
 ingestion_processor = IngestionProcessor()
-retrieval_service = RetrievalService()
+retrieval_service = RetrievalService(k=3)
 query_service = QueryService()
 
 
@@ -90,7 +88,7 @@ async def query(request: QueryRequest):
             raise HTTPException(status_code=500, detail="查询问题不存在")
 
         # 2. 调用检索器的检索方法
-        retrieval_context = retrieval_service.retrieval(user_question)
+        retrieval_context = retrieval_service.rephrase_retriever(query=user_question, multi_query_num=3)
 
         # 3. 调用查询器的查询方法
         answer = query_service.generate_answer(user_question, retrieval_context)
@@ -102,4 +100,4 @@ async def query(request: QueryRequest):
         )
     except Exception as e:
         logger.error(f"调用查询知识库服务失败:原因:{str(e)}")
-        raise HTTPException(status_code=500,detail="服务内部出现异常")
+        raise HTTPException(status_code=500, detail="服务内部出现异常")

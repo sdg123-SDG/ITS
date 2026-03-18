@@ -1,11 +1,8 @@
-
-
-from repositories.file_repository import FileRepository
+from Repositories.file_repository import FileRepository
 from services.ingestion.ingestion_processor import IngestionProcessor
 from config.settings import settings
-
 from tqdm import tqdm
-import  time
+import time
 
 
 def  main():

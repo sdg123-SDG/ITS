@@ -1,8 +1,6 @@
 api
-cli
 config
 repositories
 schemas
 services
-test
 utils

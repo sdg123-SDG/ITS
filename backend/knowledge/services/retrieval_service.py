@@ -1,373 +1,133 @@
 import logging
-import jieba
-import re
+from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_openai import ChatOpenAI
+from langchain_core.documents import Document
+from sentence_transformers import CrossEncoder
+from hashlib import sha256
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-from typing import List, Dict, Any
-from langchain_core.documents import Document
-from repositories.vector_store_repository import VectorStoreRepository
-from services.ingestion.ingestion_processor import IngestionProcessor
-from utils.markdown_utils import MarkDownUtils
+from typing import List
+from Repositories.vector_store_repository import VectorStoreRepository
 from config.settings import settings
-from sklearn.metrics.pairwise import cosine_similarity
 
 
 class RetrievalService:
     """
-    负责检索的类（检索器）
-    RAG:（小块：越小越好【小（无线小）】）文本嵌入模型  （完整信息：越大越大【不能无限大】）文本语言模型====准 原文档（大）--->1.小块（子） 2.稍微大一点的块（整个文档）【父】---留一个保留关系：穿针引线思想（父文档召回）
+        RAG的检索器
+        执行流程：
+        1. LLM对用户的query进行改写，生成多个类似的问题（多查询）
+        2. 根据多路问题分别检索向量库，合并文档并去重（初筛召回）
+        3. 利用 Reranker (重排序模型) 对召回的文档进行精准打分，保留最相关的 Top-K (精排过滤)
     """
 
-    def __init__(self):
+    def __init__(self, k: int):
         self.chroma_vector = VectorStoreRepository()
-        self.spliter = IngestionProcessor()
+        self.retriever = self.chroma_vector.vector_database.as_retriever(search_type="similarity",
+                                                                         search_kwargs={"k": k * 3})
+        self.k = k
+        self.llm = ChatOpenAI(
+            model=settings.MODEL,
+            api_key=settings.API_KEY,
+            base_url=settings.BASE_URL,
+            temperature=0.0
+        )
 
-    def rough_ranking(self, user_query, mds_metadata: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        reranker_model_name = "BAAI/bge-reranker-large"
+        logger.info(f"正在直接加载底层 CrossEncoder 模型: {reranker_model_name}...")
+        # 直接实例化 sentence-transformers 的交叉编码器
+        self.rerank_model = CrossEncoder(reranker_model_name, max_length=512)
+
+    def format_docs(self, docs: List[Document]):
+        return '\n\n'.join(doc.page_content for doc in docs)
+
+    def get_unique_docs(self, docs: list[list[Document]]) -> list[Document]:
         """
-         对标题进行粗排
-         基于jieba进行标题的分词匹配
-        Args:
-            user_query: 用户的问题
-            mds_metadata: 所有md的元数据（标题【title】，路径【path】）
-
-        Returns:
-            List[Dict[str,Any]]:所有md的元数据 （标题【title】，路径【path】，标题粗排得分【rough_score】）
-        """
-
-        # 1. 用户输入问题是否存在
-        if not user_query:
-            return []
-        ROUGHIN_WORD_WEIGHT = 0.7
-
-        # 2.遍历mds_metadata(所有md的元数据)
-        for md_metadata in mds_metadata:
-            # 2.1 获取md标题
-            md_metadata_title = md_metadata['title']
-
-            # 2.2 判断标题是否存在
-            if not md_metadata_title and not md_metadata_title.strip():
-                continue
-            # 2.3 进行分词&&算得分
-            # 2.3.1 优先用字符切:set:交、并、差:jarcard算法=A N B/A U B
-            user_query_char = set(user_query)
-            md_metadata_title_char = set(md_metadata_title)
-            unique_char = user_query_char | md_metadata_title_char
-            char_score = len(user_query_char & md_metadata_title_char) / len(unique_char) if len(unique_char) > 0 else 0
-
-            # 2.3.2 在用jieba词项切(影响因素大一些)
-            user_query_word = set(jieba.lcut(user_query))
-            md_metadata_title_word = set(jieba.lcut(md_metadata_title))
-            unique_word = user_query_word | md_metadata_title_word
-            word_score = len(user_query_word & md_metadata_title_word) / len(unique_word) if len(unique_word) > 0 else 0
-
-            # 2.3.3 计算粗排分数：字符级+词性项级(侧重)
-            roughing_score = word_score * ROUGHIN_WORD_WEIGHT + char_score * (1 - ROUGHIN_WORD_WEIGHT)
-
-            md_metadata['roughing_score'] = float(roughing_score)
-
-        # 3.根据标题的元数据（roughing_score）排序并且留下前50个
-        return sorted(mds_metadata, key=lambda x: x['roughing_score'], reverse=True)[:50]
-
-    def fine_ranking(self, user_query: str, rough_mds_metadata: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """
-         对标题进行精排
-         基于嵌入模型相似性以及cosine_similarity()
-        Args:
-            user_query: 用户当前问题
-            rough_mds_metadata: 粗排后的md元数据
-
-        Returns:
-            List[Dict[str, Any]]: 带精排分数的元数据
-        """
-
-        # 1. 判粗排元数据
-        if not rough_mds_metadata:
-            return []
-
-        # 两个二维矩阵（X[样本数] Y[样本质量]） K(X, Y) = <X, Y> / (||X||*||Y||)
-
-        # 2. 对问题向量化
-        query_embedding = self.chroma_vector.embedd_document(user_query)
-
-        # 3. 获取粗排后的标题
-        roughing_title = [md_metadata['title'] for md_metadata in rough_mds_metadata]
-
-        # 4. 标题的向量值
-        roughing_title_embeddings = self.chroma_vector.embedd_documents(roughing_title)
-
-        # 5. 计算问题和粗排标题的相似度（余弦相似分数）分数值越大 代表问题和标题越相似
-        # flatten()--->一维数组[0.1,0.4,0.01,0.6...]
-        # X:1  Y:[1,2,3,4,5]   similarity=[0.1,0.4,0.01,0.6,0.3]【-1,0】
-        similarity = cosine_similarity([query_embedding], roughing_title_embeddings).flatten()
-
-        # 6. 遍历粗排元数据
-        ROUGH_HEIGHT = 0.3
-        SIM_HEIGHT = 0.7
-        for index, md_metadata in enumerate(rough_mds_metadata):
-
-            # a. 获取精排分数(归一)
-            sim = similarity[index]
-            if sim < 0:
-                sim = 0
-            # b. 获取粗排
-            roughing_score = md_metadata['roughing_score']
-
-            # c. 加权求最终精排分数
-            final_score = roughing_score * ROUGH_HEIGHT + sim * SIM_HEIGHT
-
-            # d. 存放到md_metadata 元数据中
-            md_metadata['sim_score'] = sim
-            md_metadata['final_score'] = final_score
-
-        # 7. 排序
-        sim_mds_metadata = sorted(rough_mds_metadata, key=lambda x: x['final_score'], reverse=True)[:settings.TOP_FINAL]
-
-        # 8. 返回
-        return sim_mds_metadata
-
-    def retrieval(self, user_question: str) -> List[Document]:
-        """
-         核心检索方法（检索器的入口）
-        Args:
-            user_question: 用户输入的问题
-
-        Returns:
-           List[Document]: 返回指定Top-N个相似性文档列表
-        """
-
-        # 1. 第一路检索(基于嵌入模型的向量检索)---主要两方面（bge模型对中文比较好，langchain整合不太好[真的!]）第二方面（向量时候语义被稀释）小块嵌入【保证嵌入能力不被稀释】--->大块做管理（保证模型看到完整的信息）精度和准确性
-        based_vector_candidates = self._search_based_vector(user_question)
-
-        # 2. 第二路检索(基于jieba的分词匹配的检索)
-        based_title_candidates = self._search_based_title(user_question)
-
-        # 3. 合并两路检索的文档列表
-        total_candidates = based_vector_candidates + based_title_candidates
-
-        # 4. 对合并后的文档列表去重
-        unique_candidates = self._deduplicate(total_candidates)
-
-        # 5. 重新打分排序
-        top_documents = self._reranking(unique_candidates, user_question)
-
-        # 6.返回指定Top-N个文档列表
-        return top_documents
-
-    def _search_based_vector(self, user_question: str) -> List[Document]:
-        """
-        第一路检索
-        基于语义相似度检索
+        文档去重函数
+        去除多个文档列表中的重复文档
 
         Args:
-            user_question: 用户输入的问题
+            docs (list[list[Document]]): 多个文档列表
 
         Returns:
-            List[Document]： Top-N个相似的文档列表
-
+            list[Document]: 去重后的文档列表
         """
-        # 1.返回带分数的文档列表
-        documents_with_score = self.chroma_vector.search_similarity_with_score(user_question)
-
-        # 2.TODO(不用距离得分)
-        based_vector_candidates = []
-        for document, _ in documents_with_score:
-            based_vector_candidates.append(document)
-        return based_vector_candidates
-
-    def _search_based_title(self, user_query: str) -> List[Document]:
-        """
-         第二路检索
-         基于标题的关键词匹配检索
-        Args:
-            user_query: 用户输入的问题
-
-        Returns:
-            List[Document]: Top-N个相似的文档列表
-
-        """
-
-        # 1. 获取指定目录下的文件的标题
-        mds_metadata = MarkDownUtils.collect_md_metadata(settings.CRAWL_OUTPUT_DIR)
-
-        # 2. 进行标题匹配
-        # 2.1 关键词匹配（jieba）--->（比较对象：用户输入的问题 vs crawl目录下的文件标题）
-        # 2.2 标题的语义匹配（比较对象：用户的输入问题  vs md目录下的 ）
-        rough_mds_metadata = self.rough_ranking(user_query, mds_metadata)
-        fine_mds_metadata = self.fine_ranking(user_query, rough_mds_metadata)
-
-        # 3. 处理文档（根据标题读取标题对于的文档内容---Document(page_content,metadata={})）
-
-        based_title_candidates = []
-        for fine_md_metadata in fine_mds_metadata:
-            try:
-                # 3.1 打开文件
-                with open(fine_md_metadata['path'], "r", encoding="utf-8") as f:
-                    content = f.read().strip()
-                # 3.2 判断content内容长度
-                # a.短md知识
-                if len(content) < 3000:
-                    # 不切分
-                    doc = Document(page_content=content, metadata={
-                        "path": fine_md_metadata['path'],
-                        "title": fine_md_metadata['title'],
-                    })
-                    based_title_candidates.append(doc)
-                # b. 长md知识 切分
-                else:
-                    doc_chunks = self._deal_long_title_content(content, fine_md_metadata, user_query)
-                    based_title_candidates.extend(doc_chunks)  # doc_chunks 列表中元素打散了
-            except Exception as e:
-
-                logger.error(f"打开文件失败:{e}")
-                return []
-        # 4. 返回指定文档列表
-
-        return based_title_candidates
-
-    def _deduplicate(self, total_candidates: List[Document]) -> List[Document]:
-        """
-         对合并后的文档列表去重
-         用set()集合去重（(title,内容的前【100】个字符)）-->key
-        Args:
-            total_candidates: 合并的文档列表
-
-        Returns:
-            List[Document]：唯一的文档列表
-        """
-
-        if not total_candidates:
-            return []
-
-        # 2. 定义set集合
         seen = set()
-        unique_candidates = []
+        unique_docs = []
+        for docs_list in docs:
+            for doc in docs_list:
+                key = sha256(doc.page_content.encode("utf-8")).hexdigest()
+                if key not in seen:
+                    unique_docs.append(doc)
+                    seen.add(key)
+        return unique_docs
 
-        # 3. 遍历合并后的每一个文档列表
-        for document in total_candidates:
-            # 去重（）
-            clean_content = re.sub(r'^文档来源:.*?(?=(\n|#))', '', document.page_content, flags=re.DOTALL).strip()#【加上】
-            key = (document.metadata['title'], clean_content[:100])
-            if key not in seen:
-                seen.add(key)
-                unique_candidates.append(document)
-
-        # 4. 返回唯一的
-        return unique_candidates
-
-    def _reranking(self, unique_candidates: List[Document], user_question: str) -> List[Document]:
+    def custom_rerank_documents(self, query: str, documents: List[Document], top_n: int) -> List[Document]:
         """
-         重新计算打分&&排序
-         第二路长文档已经进行了cosine_similarity()的计算（无需在次打分）
-         对第一路的文档和第二路的短文档进行重新计算
-
-        Args:
-            unique_candidates: 唯一的候选文档列表
-            user_question: 用户输入的问题
-
-        Returns:
-            List[Document]: 最终指定Top-N的文档列表
-
+        原生手写的重排序函数
         """
-
-        # 1. 判断去重合并之后文档列表是否有文档对象
-        if not unique_candidates:
+        if not documents:
             return []
 
-        need_embedding_docs = []
-        need_embedding_candidates_indices = []
-        score_doc = []
+        # 1. 构造传入 CrossEncoder 的对：[[query, doc1], [query, doc2], ...]
+        sentence_pairs = [[query, doc.page_content] for doc in documents]
 
-        # 2. 遍历去重并合并之后的文档列表(Document,score)
-        for candidate_index, unique_candidate in enumerate(unique_candidates):
-            # 如何去判断 第二路长文档 or  第一路的文档和第二路?
-            # 2.1 第二路的长文档
-            if "chunk_index" in unique_candidate.metadata and "similarity" in unique_candidate.metadata:
-                score_doc.append((unique_candidate, unique_candidate.metadata['similarity']))
-            # 2.2 第一路和第二路的短文档
-            else:
-                need_embedding_docs.append(unique_candidate)
-                need_embedding_candidates_indices.append(candidate_index)
+        # 2. 直接进行推理打分 (返回的是一个包含分数的列表)
+        scores = self.rerank_model.predict(sentence_pairs)
 
-        # 3.处理需要重新计算分数的文档
-        if need_embedding_docs:
-            # 3.1 计算用户问题的向量
-            query_embedding = self.chroma_vector.embedd_document(user_question)
+        # 3. 将文档和分数打包在一起: [(doc1, score1), (doc2, score2), ...]
+        doc_score_pairs = list(zip(documents, scores))
 
-            # 3.2 获取到需要向量的文档内容
-            embedding_docs_content = ["文档来源:" + doc.metadata['title'] + doc.page_content for doc in
-                                      need_embedding_docs]
-            # 3.3 计算需要向量的文档内容
-            doc_embeddings = self.chroma_vector.embedd_documents(embedding_docs_content)
+        # 4. 根据分数从高到低排序
+        doc_score_pairs.sort(key=lambda x: x[1], reverse=True)
 
-            # 3.4 计算相似得分
-            similarity = cosine_similarity([query_embedding], doc_embeddings).flatten()
+        # 5. 提取排名前 top_n 的文档并返回
+        reranked_docs = [doc for doc, score in doc_score_pairs[:top_n]]
 
-            # 3.5 封装到带得分的文档列表
-            for idx, candidate_index in enumerate(need_embedding_candidates_indices):
-                score_doc.append((unique_candidates[candidate_index], similarity[idx]))
+        # 打印调试信息，你可以直观看到分数
+        for rank, (doc, score) in enumerate(doc_score_pairs[:top_n]):
+            logger.info(f"重排序 Rank {rank + 1} - 分数: {score:.4f}")
 
-        # 4. 排序
-        sorted_docs = sorted(score_doc, key=lambda x: x[1], reverse=True)
+        return reranked_docs
 
-        # 5. 返回Top-N
-        return [doc for doc, _ in sorted_docs[:2]]
+    def rephrase_retriever(self, multi_query_num: int, query: str) -> list[Document]:
+        # 1、多查询提示模板
+        multi_query_prompt = PromptTemplate.from_template(
+            """
+            你是一名AI语言模型助理。你的任务是生成给定问题的{query_num}个不同版本，以从矢量数据库中检索相关文档。
+            你需要通过从多个视角生成问题，来克服基于距离的相似性搜索的一些局限性。请使用换行符分隔备选问题。
 
-    def _deal_long_title_content(self, content: str, fine_md_metadata: Dict[str, Any], user_query: str) -> List[Document]:
-        """
-         处理标题对应的长文本
-         切分-->文档块--->算文档块和问题的相似度
-        Args:
-            content: 长文本
-            fine_md_metadata: 长文本对应的元数据
-            user_query: 用户的问题
+            原始问题：{query}
+            """
+        )
+        # 2、多查询链
+        expend_query_chain = (
+                multi_query_prompt
+                | self.llm
+                | StrOutputParser()
+        )
 
-        Returns:
-            List[Document]: 和问题相似的文档块（chunk）
-        """
+        multi_query_chain = (
+                {
+                    'query_num': lambda x: x['query_num'],
+                    'query': lambda x: x['query']
+                }  # 添加一个参数，用于控制生成多少个查询
+                | expend_query_chain  # 生成多个查询
+                | (lambda x: x + '\n' + query)
+                | (lambda x: [self.retriever.invoke(q) for q in x.split('\n') if q.strip()])  # 遍历检索多个查询
+                | self.get_unique_docs  # 文档去重
+        )
 
-        # 1. 对长文本切分(换成适合)
-        chunks = self.spliter.document_spliter.split_text(content)
+        unique_docs = multi_query_chain.invoke({'query': query, 'query_num': multi_query_num})
 
-        # 2. 获取对应的标题
-        doc_chunks_title = fine_md_metadata['title']
+        final_docs = self.custom_rerank_documents(query=query, documents=unique_docs, top_n=self.k)
 
-        # 3. 标题注入到文档块中（第二次结构和第一次的拼接一定要一样）TODO
-        doc_chunks_inject_title = [f"文档来源:{doc_chunks_title}" + doc_chunk for doc_chunk in chunks]
-
-        # 4. 对问题向量
-        query_embedding = self.chroma_vector.embedd_document(user_query)
-
-        # 5. 对切分后的文档块向量化
-        doc_chunk_embeddings = self.chroma_vector.embedd_documents(doc_chunks_inject_title)
-
-        # 6. 计算相似性:doc_chunks_similarity[0.8,0.6,0.7,0.1,0.9]
-        doc_chunks_similarity = cosine_similarity([query_embedding], doc_chunk_embeddings).flatten()
-
-        # 7. 获取3个相似性分数值高的三个索引 argsort->[3,1,2,0,4]->[2,0,4]--->[4,0,2]
-        top_doc_chunks_indices = doc_chunks_similarity.argsort()[-3:][::-1]
-
-        # 8. 构建最终文档对象列表(为每一个切分后的块)
-        docs = []
-        for i, chunk_idx in enumerate(top_doc_chunks_indices):
-            doc = Document(
-                page_content=doc_chunks_inject_title[chunk_idx],  # 带上
-                metadata={
-                    "path": fine_md_metadata['path'],
-                    "title": fine_md_metadata['title'],
-                    "chunk_index:": int(chunk_idx),
-                    "similarity": float(doc_chunks_similarity[chunk_idx])
-                }
-            )
-            docs.append(doc)
-
-        return  docs
+        return final_docs
 
 
 if __name__ == '__main__':
-    retrival_service = RetrievalService()
-    result = retrival_service.retrieval("K900") # 80-90%
-
-    for r in result:
-        print(r)
+    retrieval_service = RetrievalService(k=5)
+    r = retrieval_service.rephrase_retriever(3, "如何使用U盘安装Windows7")
+    for i in r:
+        print(i.page_content)

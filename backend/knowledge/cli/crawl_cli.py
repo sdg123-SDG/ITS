@@ -1,13 +1,13 @@
 import os
 import time
-from  services.crawler.client import KnowledgeApiClient
-from  services.crawler.parser import HtmlParser
-from  utils.text_utils import  TextUtils
-from  config.settings import  settings
-from  repositories.file_repository import FileRepository
+from services.crawler.client import KnowledgeApiClient
+from services.crawler.parser import HtmlParser
+from utils.text_utils import TextUtils
+from config.settings import settings
+from repositories.file_repository import FileRepository
 
 
-def  main():
+def main():
 
     success=0
     fail=0
@@ -22,7 +22,7 @@ def  main():
             parser = HtmlParser()
 
             # 2.解析HTML为MarkDown
-            md_content=parser.parse_html_to_markdown(str(i+1),knowledge_content)
+            md_content=parser.parse_html_to_markdown(str(i+1), knowledge_content)
 
             # 3.生成语义化文件名 {KnowledgeNo}1-{title}.md
             # 3.1 获取文件名

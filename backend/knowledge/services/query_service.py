@@ -3,20 +3,18 @@ from langchain_core.documents import Document
 from langchain_openai import ChatOpenAI
 from config.settings import settings
 
+
 class QueryService:
     """检索服务"""
 
     def __init__(self):
-
-        self.llm=ChatOpenAI(model_name=settings.MODEL,
-                            openai_api_key=settings.API_KEY,
-                            openai_api_base=settings.BASE_URL,
-                            temperature=0) 
+        self.llm = ChatOpenAI(model_name=settings.MODEL,
+                              openai_api_key=settings.API_KEY,
+                              openai_api_base=settings.BASE_URL,
+                              temperature=0)
         # temperature作用：控制模型输出的随机度 尽量不要让它乱发挥（尽最大努力保证：影响因素：硬件（并行gpu：精度变乱）网络（moe专家））
 
-
-
-    def generate_answer(self, user_question:str, retrival_context: List[Document]) -> str:
+    def generate_answer(self, user_question: str, retrival_context: List[Document]) -> str:
         """
         对接大语言模型的入口
         Args:
@@ -28,12 +26,12 @@ class QueryService:
         """
 
         # 1. 判断是否检索到了文档
-        if not  retrival_context:
+        if not retrival_context:
             return "未检索到任何相关的文档，无法提供回复"
 
-
         # 2. 处理检索到的知识内容
-        retrival_context="\n\n".join([f"资料{index+1}:{document}"for index, document in enumerate(retrival_context)])
+        retrival_context = "\n\n".join(
+            [f"资料{index + 1}:{document}" for index, document in enumerate(retrival_context)])
 
         # 3. 定义提示词
         prompt = f"""
@@ -65,11 +63,14 @@ class QueryService:
         # 4. 调用模型
         llm_response = self.llm.invoke(prompt)
 
-
         # 5. 返回模型的结果
-        return  llm_response.content
+        return llm_response.content
 
 
+if __name__ == '__main__':
+    from services.retrieval_service import RetrievalService
+    retrieval_service = RetrievalService(k=5)
+    document = retrieval_service.rephrase_retriever(3, "如何使用U盘安装Windows7")
 
-
-
+    RAG = QueryService()
+    print(RAG.generate_answer("如何使用U盘安装Windows7", document))
