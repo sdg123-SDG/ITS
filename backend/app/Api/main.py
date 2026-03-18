@@ -1,13 +1,3 @@
-import sys
-import os
-
-# 1. 动态获取当前文件所在的绝对目录（即 app 目录）
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# 2. 将其强行置于 Python 寻找包的路径列表首位
-if BASE_DIR not in sys.path:
-    sys.path.insert(0, BASE_DIR)
-
-
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

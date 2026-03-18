@@ -46,7 +46,7 @@ async def query_service_station_and_navigate(query: str) -> str:
     try:
         logger.info(f"[Route] 转交导航业务专家: {query[:30]}...")
         result = await Runner.run(
-            comprehensive_service_agent,
+            starting_agent=comprehensive_service_agent,
             input=query,
             run_config=RunConfig(tracing_disabled=True)
         )

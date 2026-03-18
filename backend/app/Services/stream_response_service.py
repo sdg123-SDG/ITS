@@ -9,7 +9,7 @@ from agents.items import ToolCallItem
 
 from utils.response_util import ResponseFactory
 from utils.text_util import format_tool_call_html, format_agent_update_html
-from schemas.response import ContentKind
+from Schemas.response import ContentKind
 
 
 async def process_stream_response(streaming_result: RunResultStreaming) -> AsyncGenerator:
