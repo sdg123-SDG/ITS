@@ -1,3 +1,4 @@
+import asyncio
 import re
 from collections.abc import AsyncGenerator
 from agents.run import Runner, RunConfig
@@ -58,6 +59,10 @@ class MultiAgentService:
             chat_history.append({"role": "assistant", "content": format_agent_result})
 
             session_service.save_history(user_id, session_id, chat_history)
+        except asyncio.CancelledError:
+            # 常见于前端断开连接/请求取消时：不要抛出堆栈影响日志观感
+            yield "data: " + ResponseFactory.build_finish().model_dump_json() + "\n\n"
+            return
         except Exception as e:
             # 记录错误日志
             logger.error(f"AgentService.process_query执行出错: {str(e)}")
@@ -78,3 +83,6 @@ class MultiAgentService:
                 # 递归调用进行重试
                 async for item in MultiAgentService.process_task(request,flag=False):
                     yield item
+            else:
+                # 最终失败时也要显式结束 SSE，避免前端一直等待
+                yield "data: " + ResponseFactory.build_finish().model_dump_json() + "\n\n"

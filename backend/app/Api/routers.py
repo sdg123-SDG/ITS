@@ -1,9 +1,11 @@
 from fastapi.routing import APIRouter
 from starlette.responses import StreamingResponse
+from fastapi.responses import FileResponse
 from Schemas.request import ChatMessageRequest, UserSessionsRequest
 from Services.agent_service import MultiAgentService
 from infrastructure.logging.logger import logger
 from Services.session_service import session_service
+import os
 
 # 1. 定义请求路由器
 router = APIRouter()
@@ -78,3 +80,35 @@ def get_user_sessions(request: UserSessionsRequest):
             "user_id": user_id,
             "error": str(e)
         }
+
+
+@router.get("/api/download/{file_name}", summary="下载文件")
+async def download_file(file_name: str):
+    """
+    下载文件
+    Args:
+        file_name: 文件名
+
+    Returns:
+        文件内容
+    """
+    try:
+        # 1. 构建文件路径
+        # Use the same directory as the knowledge backend
+        file_path = os.path.join(os.path.dirname(__file__), '..', '..', 'knowledge', 'data', 'tmp', file_name)
+        
+        # 2. 检查文件是否存在
+        if not os.path.exists(file_path):
+            from fastapi import HTTPException
+            raise HTTPException(status_code=404, detail="文件不存在")
+        
+        # 3. 读取文件内容并返回
+        return FileResponse(
+            path=file_path,
+            filename=file_name,
+            media_type="application/octet-stream"
+        )
+    except Exception as e:
+        logger.error(f"下载文件失败:原因:{str(e)}")
+        from fastapi import HTTPException
+        raise HTTPException(status_code=500, detail="服务内部出现异常")

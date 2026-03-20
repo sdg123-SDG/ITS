@@ -36,7 +36,7 @@ class RetrievalService:
             temperature=0.0
         )
 
-        reranker_model_name = "BAAI/bge-reranker-large"
+        reranker_model_name = 'C:/Users/sdg17/.cache/huggingface/hub/models--BAAI--bge-reranker-large/snapshots/55611d7bca2a7133960a6d3b71e083071bbfc312'
         logger.info(f"正在直接加载底层 CrossEncoder 模型: {reranker_model_name}...")
         # 直接实例化 sentence-transformers 的交叉编码器
         self.rerank_model = CrossEncoder(reranker_model_name, max_length=512)

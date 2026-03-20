@@ -58,56 +58,53 @@ async def query_service_station_and_navigate(query: str) -> str:
 AGENT_TOOLS = [consult_technical_expert, query_service_station_and_navigate]
 
 
-async def run_technical_tool():
-    """测试技术专家工具"""
-    print("\n" + "=" * 80)
-    print("测试技术专家Agent Tool")
-    print("=" * 80)
-    await search_mcp_client.connect()
-
-    test_cases = ["如何安装Windows7"]
-
-    for query in test_cases:
-        print(f"\n 查询: {query}")
-        print("-" * 0)
-        result = await consult_technical_expert(query=query)
-        print(f"回答: {result}\n")
-
-    await search_mcp_client.cleanup()
-
-
-async def run_service_tool():
-    """测试业务服务工具"""
-    print("\n" + "=" * 80)
-    print("测试业务服务Agent Tool")
-    print("=" * 80)
-
-    await baidu_mcp_client.connect()
-
-    test_cases = [
-        "怎么去颐和园"
-    ]
-
-    for query in test_cases:
-        print(f"\n查询: {query}")
-        print("-" * 80)
-        result = await query_service_station_and_navigate(query=query)
-        print(f"回答: {result}\n")
-
-    await baidu_mcp_client.cleanup()
-
-
-async def main():
-    # 1. 测试技术智能体工具
-    await run_technical_tool()
-
-    # 2. 测试全能业务智能体工具
-    # await run_service_tool()
-    # print("\n所有测试完成！\n")
-
-
-# 以下是测试代码，可以独立运行测试每个Agent Tool
-if __name__ == "__main__":
-    import asyncio
-
-    asyncio.run(main())
+# async def run_technical_tool():
+#     """测试技术专家工具"""
+#     print("\n" + "=" * 80)
+#     print("测试技术专家Agent Tool")
+#     print("=" * 80)
+#     await search_mcp_client.connect()
+#
+#     test_cases = ["如何安装Windows7"]
+#
+#     for query in test_cases:
+#         print(f"\n 查询: {query}")
+#         print("-" * 0)
+#         result = await consult_technical_expert(query=query)
+#         print(f"回答: {result}\n")
+#
+#     await search_mcp_client.cleanup()
+#
+# async def run_service_tool():
+#     """测试业务服务工具"""
+#     print("\n" + "=" * 80)
+#     print("测试业务服务Agent Tool")
+#     print("=" * 80)
+#
+#     await baidu_mcp_client.connect()
+#
+#     test_cases = [
+#         "怎么去颐和园"
+#     ]
+#
+#     for query in test_cases:
+#         print(f"\n查询: {query}")
+#         print("-" * 80)
+#         result = await query_service_station_and_navigate(query=query)
+#         print(f"回答: {result}\n")
+#
+#     await baidu_mcp_client.cleanup()
+#
+# async def main():
+#     # 1. 测试技术智能体工具
+#     # await run_technical_tool()
+#
+#     # 2. 测试全能业务智能体工具
+#     await run_service_tool()
+#     # print("\n所有测试完成！\n")
+#
+# # 以下是测试代码，可以独立运行测试每个Agent Tool
+# if __name__ == "__main__":
+#     import asyncio
+#
+#     asyncio.run(main())

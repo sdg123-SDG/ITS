@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the app directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+
 from agents import function_tool
 import asyncio
 import httpx
@@ -37,10 +43,3 @@ async def query_knowledge(query: str) -> Dict:
         except Exception as e:
             logger.error(f"未知的错误:{repr(e)}")
             return {"status": "error", "message": f'未知的错误:{repr(e)}'}
-
-
-async def main():
-    r = await query_knowledge(query='电脑不能开机了，怎么办')
-    print(r)
-if __name__ == '__main__':
-    asyncio.run(main())

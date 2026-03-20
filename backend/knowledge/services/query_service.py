@@ -70,7 +70,7 @@ class QueryService:
 if __name__ == '__main__':
     from services.retrieval_service import RetrievalService
     retrieval_service = RetrievalService(k=5)
-    document = retrieval_service.rephrase_retriever(3, "如何使用U盘安装Windows7")
+    document = retrieval_service.rephrase_retriever(3, "掌柜问数")
 
     RAG = QueryService()
-    print(RAG.generate_answer("如何使用U盘安装Windows7", document))
+    print(RAG.generate_answer("掌柜问数", document))

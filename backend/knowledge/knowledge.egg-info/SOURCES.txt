@@ -1,4 +1,10 @@
 setup.py
+Repositories/__init__.py
+Repositories/file_repository.py
+Repositories/vector_store_repository.py
+Utils/__init__.py
+Utils/markdown_utils.py
+Utils/text_utils.py
 api/__init__.py
 api/main.py
 api/router.py

@@ -101,3 +101,36 @@ async def query(request: QueryRequest):
     except Exception as e:
         logger.error(f"调用查询知识库服务失败:原因:{str(e)}")
         raise HTTPException(status_code=500, detail="服务内部出现异常")
+
+
+@router.get("/download/{file_name}", summary="下载文件")
+async def download_file(file_name: str):
+    """
+    下载文件
+    Args:
+        file_name: 文件名
+
+    Returns:
+        文件内容
+    """
+    try:
+        # 1. 构建文件路径
+        temp_md_dir = settings.TMP_MD_FOLDER_PATH
+        file_path = os.path.join(temp_md_dir, file_name)
+        
+        # 2. 检查文件是否存在
+        if not os.path.exists(file_path):
+            raise HTTPException(status_code=404, detail="文件不存在")
+        
+        # 3. 读取文件内容并返回
+        from fastapi.responses import FileResponse
+        return FileResponse(
+            path=file_path,
+            filename=file_name,
+            media_type="application/octet-stream"
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"下载文件失败:原因:{str(e)}")
+        raise HTTPException(status_code=500, detail="服务内部出现异常")

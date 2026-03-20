@@ -75,14 +75,8 @@
             </div>
 
             <div class="navigation-container" v-show="isSidebarExpanded">
-              <div class="navigation-item" :class="{ 'selected': selectedNavItem === 'knowledge' }" @click="handleKnowledgeBase">
-                <span class="nav-text">藏经阁 (知识库)</span>
-              </div>
-              <div class="navigation-item" :class="{ 'selected': selectedNavItem === 'service' }" @click="handleServiceStation">
-                <span class="nav-text">驿站 (服务站)</span>
-              </div>
-              <div class="navigation-item" :class="{ 'selected': selectedNavItem === 'network' }" @click="handleNetworkSearch">
-                <span class="nav-text">八方听风 (联网)</span>
+              <div class="navigation-item" :class="{ 'selected': selectedNavItem === 'knowledge_manage' }" @click="handleKnowledgeManage">
+                <span class="nav-text">知识库管理</span>
               </div>
             </div>
 
@@ -115,33 +109,36 @@
         </div>
 
         <div class="main-container">
-          <div class="result-container" :class="{ 'processing': isProcessing }">
+          <div class="top-user-section">
+            <div class="user-avatar-container" ref="avatarContainerRef">
+              <img
+                src="/avatar.png"
+                class="user-avatar"
+                alt="用户头像"
+                @click="toggleUserInfo"
+                tabindex="0"
+              />
 
-            <div class="top-user-section">
-              <div class="user-avatar-container" ref="avatarContainerRef">
-                <img
-                  src="/avatar.png"
-                  class="user-avatar"
-                  alt="用户头像"
-                  @click="toggleUserInfo"
-                  tabindex="0"
-                />
-
-                <div class="user-info-dropdown" v-show="showUserInfo">
-                  <template v-if="currentUser">
-                    <span class="user-name">{{ currentUser }}</span>
-                    <button data-testid="setup_logout" class="btn-tertiary logout-btn" @click="handleLogout">
-                      退出登录
-                    </button>
-                  </template>
-                  <template v-else>
-                    <span class="user-name">尚未落座</span>
-                    <button class="login-button btn-primary" @click="goToLogin">请登录</button>
-                  </template>
-                </div>
+              <div class="user-info-dropdown" v-show="showUserInfo">
+                <template v-if="currentUser">
+                  <span class="user-name">{{ currentUser }}</span>
+                  <button data-testid="setup_logout" class="btn-tertiary logout-btn" @click="handleLogout">
+                    退出登录
+                  </button>
+                </template>
+                <template v-else>
+                  <span class="user-name">尚未落座</span>
+                  <button class="login-button btn-primary" @click="goToLogin">请登录</button>
+                </template>
               </div>
             </div>
+          </div>
 
+          <!-- 知识库管理页面 -->
+          <KnowledgeBase v-if="selectedNavItem === 'knowledge_manage'" />
+
+          <!-- 聊天界面 -->
+          <div v-else class="result-container" :class="{ 'processing': isProcessing }">
             <div class="chat-message-container" ref="processContent">
               <div v-for="(msg, index) in chatMessages" :key="index" :class="['message-wrapper', msg.type]">
 
@@ -196,6 +193,7 @@
 <script>
 import { ref, computed, onMounted, watch, nextTick, onUnmounted } from 'vue';
 import { marked } from 'marked';
+import KnowledgeBase from './KnowledgeBase.vue';
 
 // Configure marked options
 marked.setOptions({
@@ -215,6 +213,9 @@ const renderMarkdown = (text) => {
 
 export default {
   name: 'App',
+  components: {
+    KnowledgeBase
+  },
   setup() {
     const isLoggedIn = ref(true);
     const isSidebarExpanded = ref(true);
@@ -290,6 +291,14 @@ export default {
       answerText.value = '';
       processContent.value = null;
       selectedNavItem.value = 'service';
+      selectedSessionId.value = '';
+    };
+
+    const handleKnowledgeManage = () => {
+      processMessages.value = [];
+      answerText.value = '';
+      processContent.value = null;
+      selectedNavItem.value = 'knowledge_manage';
       selectedSessionId.value = '';
     };
 
@@ -646,6 +655,7 @@ export default {
       handleKnowledgeBase,
       handleNetworkSearch,
       handleServiceStation,
+      handleKnowledgeManage,
       selectSession,
       fetchUserSessions,
       createNewSession,

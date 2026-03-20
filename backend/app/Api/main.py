@@ -1,9 +1,14 @@
 import uvicorn
+import sys
+import os
+
+# Add the app directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from infrastructure.logging.logger import logger
-from infrastructure.tools.mcp.mcp_manager import mcp_connect, mcp_cleanup
 from Api.routers import router
 
 @asynccontextmanager
@@ -15,22 +20,32 @@ async def lifespan(app: FastAPI):
     确保资源正确初始化和释放。
     """
     # 应用启动时执行
-    logger.info("应用启动，建立MCP连接...")
+    logger.info("应用启动...")
+    
+    # 导入MCP客户端
+    from infrastructure.tools.mcp.mcp_servers import search_mcp_client, baidu_mcp_client
+    
+    # 连接MCP服务器
     try:
-        await mcp_connect()
-        logger.info("MCP连接建立完成")
+        logger.info("正在连接MCP服务器...")
+        await search_mcp_client.connect()
+        await baidu_mcp_client.connect()
+        logger.info("MCP服务器连接成功")
     except Exception as e:
-        logger.error(f"MCP连接建立失败: {str(e)}")
+        logger.error(f"MCP服务器连接失败: {str(e)}")
 
-    yield  # 应用运行期间（先别释放mcp链接 去处理请求...）
+    yield  # 应用运行期间
 
     # 应用关闭时执行
-    logger.info("应用关闭，清理MCP连接...")
+    logger.info("应用关闭...")
+    
+    # 清理MCP连接
     try:
-        await mcp_cleanup()
-        logger.info("MCP连接清理完成")
+        await search_mcp_client.cleanup()
+        await baidu_mcp_client.cleanup()
+        logger.info("MCP服务器连接已清理")
     except Exception as e:
-        logger.error(f"MCP连接清理失败: {str(e)}")
+        logger.error(f"MCP服务器连接清理失败: {str(e)}")
 
 
 def create_fast_api() -> FastAPI:
