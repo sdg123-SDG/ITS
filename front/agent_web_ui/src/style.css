@@ -1,28 +1,32 @@
 /* ==========================================================
-   传统水墨书画风格 (Ink and Wash Style) - 灵动圆润版
+   简约高级蓝白风格 (Minimalist High-End Blue & White Style)
    ========================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* 水墨调色板 */
-  --ink-bg-paper: #f9f8f4; /* 宣纸白微黄 */
-  --ink-bg-sidebar: #2c2b29; /* 砚台黑/深炭灰 */
-  --ink-bg-sidebar-hover: #3d3b38;
-  --ink-text-main: #1a1a1a; /* 浓墨 */
-  --ink-text-muted: #5e5e5e; /* 淡墨 */
-  --ink-text-light: #e0dcd3; /* 侧边栏反白字 */
-  --ink-border: #d4d0c8; /* 浅墨线 */
-  --ink-border-dark: #3a3a3a;
-  --ink-seal-red: #b32a2a; /* 朱砂印章红 */
-  --ink-seal-hover: #8f1f1f;
+  /* 蓝白调色板 */
+  --primary-bg: #ffffff; /* 纯白背景 */
+  --secondary-bg: #f5f7fa; /* 浅灰白 */
+  --sidebar-bg: #1a365d; /* 深蓝侧边栏 */
+  --sidebar-hover: #2c5282; /* 深蓝hover */
+  --primary-blue: #3182ce; /* 主蓝色 */
+  --light-blue: #ebf8ff; /* 浅蓝 */
+  --dark-blue: #2b6cb0; /* 深蓝 */
+  --text-main: #2d3748; /* 主文本 */
+  --text-muted: #718096; /* 次要文本 */
+  --text-light: #ffffff; /* 白色文本 */
+  --border-light: #e2e8f0; /* 浅边框 */
+  --border-dark: #cbd5e0; /* 深边框 */
+  --success-color: #38a169; /* 成功色 */
+  --error-color: #e53e3e; /* 错误色 */
 
-  /* 字体设定为宋体/明朝体等传统衬线体 */
-  font-family: 'Noto Serif SC', 'STSong', 'SimSun', 'KaiTi', serif;
-  line-height: 1.8;
+  /* 字体设定为现代无衬线体 */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
-  color: var(--ink-text-main);
-  background-color: var(--ink-bg-paper);
+  color: var(--text-main);
+  background-color: var(--primary-bg);
 }
 
 body {
@@ -31,9 +35,9 @@ body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background-color: var(--ink-bg-paper);
-  /* 极淡的宣纸纹理感 */
-  background-image: radial-gradient(#d4d0c8 0.5px, transparent 0.5px);
+  background-color: var(--primary-bg);
+  /* 极淡的网格纹理感 */
+  background-image: radial-gradient(var(--border-light) 0.5px, transparent 0.5px);
   background-size: 20px 20px;
 }
 
@@ -69,24 +73,24 @@ button {
   overflow: hidden;
 }
 
-/* ================== 侧边栏 (砚台色) ================== */
+/* ================== 侧边栏 (深蓝色) ================== */
 .sidebar-wrapper {
   position: relative;
   display: flex;
   z-index: 50;
-  box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+  box-shadow: 4px 0 15px rgba(0,0,0,0.05);
 }
 
 .sidebar-content {
   width: 60px;
-  background-color: var(--ink-bg-sidebar);
-  color: var(--ink-text-light);
+  background-color: var(--sidebar-bg);
+  color: var(--text-light);
   display: flex;
   flex-direction: column;
   transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   overflow: hidden;
   height: 100%;
-  border-right: 2px solid #1a1a1a;
+  border-right: 1px solid var(--border-light);
 }
 
 .sidebar-content.expanded {
@@ -98,7 +102,7 @@ button {
   align-items: center;
   justify-content: space-between;
   padding: 20px 16px;
-  border-bottom: 1px dashed var(--ink-border-dark);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 /* 侧边栏菜单项 */
@@ -108,22 +112,23 @@ button {
   gap: 12px;
   padding: 12px 16px;
   margin: 4px 12px;
-  color: var(--ink-text-light);
+  color: var(--text-light);
   cursor: pointer;
-  border-radius: 8px; /* 侧边栏元素也稍微变圆润 */
+  border-radius: 8px;
   font-size: 15px;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
   border-left: 2px solid transparent;
 }
 
 .navigation-item:hover, .session-item:hover {
-  background-color: var(--ink-bg-sidebar-hover);
+  background-color: var(--sidebar-hover);
+  transform: translateX(4px);
 }
 
 .navigation-item.selected, .session-item.selected {
-  background-color: var(--ink-bg-sidebar-hover);
-  border-left: 3px solid var(--ink-seal-red); /* 朱砂红点缀 */
-  font-weight: bold;
+  background-color: var(--sidebar-hover);
+  border-left: 3px solid var(--primary-blue);
+  font-weight: 600;
   color: #fff;
 }
 
@@ -145,7 +150,7 @@ button {
   width: 4px;
 }
 .sessions-list::-webkit-scrollbar-thumb {
-  background-color: #555;
+  background-color: rgba(255,255,255,0.3);
   border-radius: 4px;
 }
 
@@ -158,25 +163,33 @@ button {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px 12px;
-  background-color: transparent;
-  color: var(--ink-text-light);
-  border: 1px solid var(--ink-border-dark);
+  padding: 12px 16px;
+  background-color: rgba(255,255,255,0.1);
+  color: var(--text-light);
+  border: 1px solid rgba(255,255,255,0.2);
   border-radius: 8px;
   font-size: 15px;
   text-decoration: none;
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 .new-chat-btn:hover {
-  background-color: var(--ink-bg-sidebar-hover);
-  border-color: var(--ink-seal-red);
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
 }
 
 .toggle-sidebar-btn {
   background: transparent;
-  color: var(--ink-text-light);
+  color: var(--text-light);
   border: none;
   font-size: 20px;
+  transition: color 0.3s ease;
+}
+
+.toggle-sidebar-btn:hover {
+  color: var(--primary-blue);
 }
 
 /* ================== 主内容区 & 用户头像 ================== */
@@ -184,7 +197,7 @@ button {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: transparent;
+  background-color: var(--primary-bg);
   position: relative;
 }
 
@@ -205,16 +218,18 @@ button {
 .user-avatar {
   width: 44px;
   height: 44px;
-  border-radius: 50%; /* 顶部头像改为正圆 */
+  border-radius: 50%;
   cursor: pointer;
-  border: 2px solid var(--ink-border);
-  background-color: #fff;
+  border: 2px solid var(--border-light);
+  background-color: var(--light-blue);
   object-fit: cover;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.08);
-  transition: transform 0.3s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
 }
 .user-avatar:hover {
   transform: scale(1.05);
+  border-color: var(--primary-blue);
+  box-shadow: 0 4px 15px rgba(49, 130, 206, 0.2);
 }
 
 .user-info-dropdown {
@@ -222,22 +237,23 @@ button {
   top: 100%;
   right: 0;
   margin-top: 10px;
-  background-color: var(--ink-bg-paper);
-  border: 1px solid var(--ink-border);
+  background-color: var(--primary-bg);
+  border: 1px solid var(--border-light);
   border-radius: 8px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
   padding: 16px;
   min-width: 160px;
   z-index: 1001;
+  transition: all 0.3s ease;
 }
 
 .user-name {
   display: block;
   font-size: 16px;
-  font-weight: bold;
-  color: var(--ink-text-main);
+  font-weight: 600;
+  color: var(--text-main);
   margin-bottom: 12px;
-  border-bottom: 1px dashed var(--ink-border);
+  border-bottom: 1px dashed var(--border-light);
   padding-bottom: 8px;
   text-align: center;
 }
@@ -245,24 +261,28 @@ button {
 .logout-btn {
   width: 100%;
   background: transparent;
-  border: 1px solid var(--ink-seal-red);
-  color: var(--ink-seal-red);
-  padding: 6px 0;
-  border-radius: 16px;
+  border: 1px solid var(--primary-blue);
+  color: var(--primary-blue);
+  padding: 8px 0;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 .logout-btn:hover {
-  background: var(--ink-seal-red);
+  background: var(--primary-blue);
   color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
 }
 
-/* ================== 聊天气泡区域 (水墨晕染排版) ================== */
+/* ================== 聊天气泡区域 (蓝白简约风格) ================== */
 .chat-message-container {
   flex: 1;
   overflow-y: auto;
   padding: 60px 0 160px 0;
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 24px;
   scroll-behavior: smooth;
 }
 
@@ -279,14 +299,15 @@ button {
 .chat-avatar {
   width: 40px;
   height: 40px;
-  border-radius: 50%; /* 聊天头像改为正圆，契合圆润主题 */
+  border-radius: 50%;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 1px solid var(--ink-border);
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
 }
 .chat-avatar img {
   width: 100%;
@@ -295,14 +316,13 @@ button {
 }
 
 .ai-avatar {
-  background-color: var(--ink-bg-paper);
-  border: 2px solid var(--ink-seal-red);
-  color: var(--ink-seal-red);
+  background-color: var(--light-blue);
+  border: 2px solid var(--primary-blue);
+  color: var(--primary-blue);
 }
 .ink-avatar-text {
-  font-family: 'KaiTi', 'STKaiti', serif;
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .message-body {
@@ -318,89 +338,94 @@ button {
   align-items: flex-end;
 }
 
-/* --- 核心动画：墨色流淌 --- */
-@keyframes inkFlow {
+/* --- 核心动画：蓝色渐变流动 --- */
+@keyframes blueFlow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* --- 用户气泡：淡墨流转 --- */
+/* --- 用户气泡：蓝白渐变 --- */
 .message-wrapper.user .message-bubble {
-  /* 使用略深一点的水墨渐变来制造流动感 */
-  background: linear-gradient(135deg, rgba(0,0,0,0.02), rgba(0,0,0,0.06), rgba(0,0,0,0.02));
+  background: linear-gradient(135deg, var(--light-blue), #ffffff, var(--light-blue));
   background-size: 200% 200%;
-  animation: inkFlow 8s ease infinite; /* 绑定流动动画 */
+  animation: blueFlow 8s ease infinite;
 
-  color: var(--ink-text-main);
-  border: 1px solid rgba(0,0,0,0.08); /* 极细的水痕边框 */
+  color: var(--text-main);
+  border: 1px solid var(--border-light);
 
-  /* 圆润造型：右上、左上、左下大圆角，右下收尖如水滴 */
-  border-radius: 24px 24px 4px 24px;
+  border-radius: 20px 20px 4px 20px;
   padding: 12px 20px;
   font-size: 16px;
 
-  /* 外层扩散阴影 + 内层高光，形成立体水洼感 */
-  box-shadow: 2px 4px 12px rgba(0,0,0,0.04), inset 0 0 15px rgba(255,255,255,0.4);
+  box-shadow: 0 2px 10px rgba(49, 130, 206, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* --- AI 气泡：宣白流转 --- */
+/* --- AI 气泡：深蓝渐变 --- */
 .message-wrapper.assistant .message-bubble {
-  /* AI气泡使用提亮的宣纸白来和底层(偏黄)进行区分 */
-  background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,1), rgba(255,255,255,0.6));
+  background: linear-gradient(135deg, var(--primary-bg), var(--light-blue), var(--primary-bg));
   background-size: 200% 200%;
-  animation: inkFlow 8s ease infinite reverse;
+  animation: blueFlow 8s ease infinite reverse;
 
-  color: var(--ink-text-main);
-  border: 1px solid rgba(0,0,0,0.04);
+  color: var(--text-main);
+  border: 1px solid var(--border-light);
 
-  /* 圆润造型：右上、左上、右下大圆角，左下收尖 */
-  border-radius: 24px 24px 24px 4px;
+  border-radius: 20px 20px 20px 4px;
   padding: 16px 20px;
   font-size: 16px;
 
-  box-shadow: 2px 4px 15px rgba(0,0,0,0.03), inset 0 0 8px rgba(0,0,0,0.01);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
 }
 
-/* Markdown 字体强化为衬线体 */
+/* Markdown 样式 */
 .markdown-body {
-  color: var(--ink-text-main) !important;
+  color: var(--text-main) !important;
   font-family: inherit !important;
   font-size: 16px !important;
   background: transparent !important;
   letter-spacing: 0.5px;
 }
 .markdown-body pre {
-  background-color: rgba(0,0,0,0.03) !important; /* 墨色浅底 */
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 12px;
+  background-color: var(--secondary-bg) !important;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 12px;
 }
 .markdown-body code {
-  color: var(--ink-seal-red) !important;
-  background-color: transparent !important;
+  color: var(--primary-blue) !important;
+  background-color: var(--light-blue) !important;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
-/* 思考过程 - 淡墨痕迹 */
+/* 思考过程 - 蓝色痕迹 */
 .thinking-header {
   display: inline-flex;
   align-items: center;
-  color: var(--ink-text-muted);
+  color: var(--text-muted);
   font-size: 14px;
   cursor: pointer;
   padding: 4px 0;
   font-style: italic;
   opacity: 0.8;
+  transition: all 0.3s ease;
+}
+.thinking-header:hover {
+  color: var(--primary-blue);
+  opacity: 1;
 }
 .message-wrapper.THINKING .message-bubble {
   background: transparent;
   box-shadow: none;
   border: none;
   animation: none;
-  border-left: 2px dashed rgba(0,0,0,0.15);
+  border-left: 2px dashed var(--primary-blue);
   border-radius: 0;
   padding-left: 16px;
   margin-left: 8px;
-  color: var(--ink-text-muted);
+  color: var(--text-muted);
 }
 
 /* ================== 底部输入框 ================== */
@@ -418,26 +443,27 @@ button {
 
 .textarea-with-button {
   position: relative;
-  background: rgba(255,255,255,0.85); /* 半透白底，微微透出底层的纸纹 */
+  background: var(--primary-bg);
   backdrop-filter: blur(4px);
-  border: 1px solid var(--ink-border);
-  border-radius: 24px; /* 输入框也变得非常圆润 */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06), inset 0 0 10px rgba(0,0,0,0.01);
+  border: 1px solid var(--border-light);
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: all 0.3s ease;
 }
 
 .textarea-with-button:focus-within {
-  border-color: rgba(0,0,0,0.3);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(0,0,0,0.01);
+  border-color: var(--primary-blue);
+  box-shadow: 0 4px 20px rgba(49, 130, 206, 0.15);
+  transform: translateY(-2px);
 }
 
 textarea {
   width: 100%;
   background: transparent;
   border: none;
-  color: var(--ink-text-main);
+  color: var(--text-main);
   font-size: 16px;
   resize: none;
   outline: none;
@@ -449,38 +475,35 @@ textarea {
   line-height: 1.6;
 }
 
-/* 印章式发送按钮 */
+/* 现代发送按钮 */
 .send-button {
   position: absolute;
   right: 16px;
   bottom: 16px;
   width: 90px;
   height: 44px;
-  background-color: transparent;
-  color: var(--ink-seal-red);
-  border: 2px solid var(--ink-seal-red);
-  border-radius: 12px; /* 按压印章略带圆角 */
-  font-family: 'KaiTi', 'STKaiti', serif;
-  font-size: 18px;
-  font-weight: bold;
-  letter-spacing: 4px;
+  background-color: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.3);
 }
 
 .send-button:hover:not(:disabled) {
-  background-color: var(--ink-seal-red);
-  color: #fff;
-  box-shadow: 0 6px 15px rgba(179, 42, 42, 0.25);
+  background-color: var(--dark-blue);
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.4);
   transform: translateY(-2px);
 }
 
 .send-button:disabled {
-  border-color: rgba(0,0,0,0.15);
-  color: rgba(0,0,0,0.3);
-  background: transparent;
+  background-color: var(--border-light);
+  color: var(--text-muted);
   box-shadow: none;
   cursor: not-allowed;
   transform: none;

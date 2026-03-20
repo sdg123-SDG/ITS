@@ -9,6 +9,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import sys
 import os
 
@@ -22,10 +23,19 @@ def create_fast_api() -> FastAPI:
     # 1. 创建FastApi实例
     app = FastAPI(title="Knowledge API")
 
-    # 2. 注册各种路由
+    # 2. 配置CORS中间件
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:5173"],  # 允许前端访问的域名
+        allow_credentials=True,
+        allow_methods=["*"],  # 允许所有HTTP方法
+        allow_headers=["*"],  # 允许所有HTTP头
+    )
+
+    # 3. 注册各种路由
     app.include_router(router=router)
 
-    # 3.返回创建的FastAPI
+    # 4.返回创建的FastAPI
     return app
 
 
